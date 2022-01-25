@@ -70,45 +70,15 @@ void setup() {
   catch(IOException e) {
     print("fail");
   }
+  guiController.createGuiElement(400, 400, 500, 450, 5, 0, new int[][] {{0, 0}, {100, 0}, {100, 100}, {0, 100}}, 
+    "tempText", new color[] {0, 0, 0}, true, true, true, true, new GuiElementClickBehavior0());
 }
 
 void draw() {
   background(255);
-  if (nameDropdownMenuOpen) {
-    try {
-      if (readyToParse == false) {
-        println("---Not Ready To Parse---");
-      }
-      line = reader.readLine();
-    } 
-    catch (IOException e) {
-      e.printStackTrace();
-      line = null;
-      println("CATCH IO");
-    }
-    if (line == null) {
-      if (readyToParse == false) {
-        frameRate(90);
-        println("---Ready To Parse---");
-        readyToParse = true;
-      }
-    } else {
-      //Below code allows for dynamic adding of names to a list
-      sameName = false;
-      String[] pieces = split(line, " "); 
-      println("Entered");
-      if (pieces.length >= 7) {
-        println("Length Check Success");
-        if (pieces[pieces.length-1].equals("(Critical)")) {
-          println("length - 1 check");
-          addNames(pieces, 2);
-        } else if (pieces[1].equals("[Combat]") && ((pieces[pieces.length-2].equals("from") && pieces[pieces.length-3].equals("damage")) || pieces[pieces.length-2].equals("damage"))) {
-          println("fallback");
-          addNames(pieces, 1);
-        }
-      }
-    }
-  }
+  
+  drawDropdownMenu();
+  guiController.display();
 
   textAlign(LEFT);
   //Main\\

@@ -27,3 +27,5 @@ boolean readyToParse = false;
 boolean nameDropdownMenuOpen = false;
 boolean sameName = false;
 boolean critDamageUpGiven = false;
+//GUI MAIN\\
+GuiMain guiController = new GuiMain();
