@@ -50,11 +50,13 @@ void setup() {
   String[] splitPaths = split(path, "\\");
   String foundPath = join(splitPaths, "/");
   String usePath = foundPath +"/appdata/LocalLow/Orbus Online, LLC/OrbusVR/combat.log";
+  String usePath2 = "guiElements.txt";
   String[] lines = loadStrings(usePath);
   for (String i : lines) {
     charsToSkip = charsToSkip + i.length();
   }
   reader = createReader(usePath);
+  reader2 = createReader(usePath2);
   //Basic Setup\\
   size(860, 750);
   frameRate(90);
@@ -62,7 +64,6 @@ void setup() {
   strokeWeight(2);
   stroke(0, 0, 0);
   background(255);
-  textSize(80);
   //Skip to front of log
   try {
     reader.skip(charsToSkip*2);
@@ -70,16 +71,18 @@ void setup() {
   catch(IOException e) {
     print("fail");
   }
-  guiController.createGuiElement(400, 400, 500, 450, 5, 0, new int[][] {{0, 0}, {100, 0}, {100, 100}, {0, 100}}, 
-    "tempText", new color[] {0, 0, 0}, true, true, true, true, new GuiElementClickBehavior0());
+  addGuiButtonsFromFile();
+  //guiController.createGuiElement(100, 550, 150, 100, 5, 0, new int[][] {{0, 0}, {150, 0}, {150, 100}, {0, 100}}, 
+    //"The only job is won through sheer force of will", new color[] {0, 255, 0}, true, true, true, true, new GuiElementClickBehavior0());
 }
 
 void draw() {
   background(255);
-  
+  //println(mouseX,mouseY);
+
   drawDropdownMenu();
   guiController.display();
-
+  fill(0);
   textAlign(LEFT);
   //Main\\
   // Player must self report how much + % Crit Damage they have on their gear
@@ -99,4 +102,5 @@ void draw() {
 void mousePressed() {
   // Code to check what GUI Element is pressed
   // Buttons will be for 2 main function options and reporting the + % Crit Damage on a player's gear to counteract any crit damage
+  guiController.buttonCheckMouseHovering();
 }

@@ -30,7 +30,6 @@ void drawDropdownMenu() {
       //Below code allows for dynamic adding of names to a list
       sameName = false;
       String[] pieces = split(line, " "); 
-      println("Entered");
       if (pieces.length >= 7) {
         println("Length Check Success");
         if (pieces[pieces.length-1].equals("(Critical)")) {
@@ -68,3 +67,50 @@ void addNames(String[] pieces, int arrayIndex) {
     }
   }
 } 
+void addGuiButtonsFromFile() {
+  addGuiButtonsFromFileContent();
+  while (line2 != null) {
+    addGuiButtonsFromFileContent();
+  }
+}
+void addGuiButtonsFromFileContent() {
+  try {
+    line2 = reader2.readLine();
+  } 
+  catch (IOException e) {
+    e.printStackTrace();
+    line = null;
+  }
+  if (line2 == null) {
+    // Stop reading because of an error or file is empty
+  } else {
+    try {
+      String[] pieces = splitTokens(line2, "|_");
+
+      if (pieces[0].equals("Example")) {
+        //Checking to see if line2 is an example or not
+      } else {
+
+        for (int i = 14; i < pieces.length; i+=2) {
+          verts.add(new int[]{int(pieces[i]), int(pieces[i+1])});
+        }
+        int[][] vertsConvert = new int[verts.size()][2];
+        for (int i = 0; i < verts.size(); i++) {
+          vertsConvert[i] = verts.get(i);
+        }
+        verts.clear();
+        //min 14
+        BehaviorFactory factory = new BehaviorFactory(pieces[13]);
+        GuiElementBehavior behavior = factory.createBehavior(pieces[13]);
+        color[] colors = {color(unhex(pieces[6])), color(unhex(pieces[7])), color(unhex(pieces[8]))};
+        guiController.createGuiElement(new int[] {int(pieces[0]), int(pieces[1]), int(pieces[2]), int(pieces[3]), int(pieces[4]), 
+          id}, pieces[5], colors, boolean(pieces[9]), boolean(pieces[10]), 
+          boolean(pieces[11]), boolean(pieces[12]), behavior, vertsConvert);
+        id++;
+      }
+    } 
+    catch (ArrayIndexOutOfBoundsException e) {
+      e.printStackTrace();
+    }
+  }
+}

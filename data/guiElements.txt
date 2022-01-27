@@ -1,0 +1,4 @@
+Example|x|y|w|h|strokeWeight|text|R_G_B|Border|Filled|Closed|TextVisibility|Behavior|x_y
+100|550|150|100|5|ButtonBehavior0|0_255_0|true|true|true|true|GuiElementClickBehavior0|0_0|150_0|150_100|0_100
+600|550|150|100|5|ButtonBehavior1|0_255_0|true|true|true|true|GuiElementClickBehavior1|0_0|150_0|150_100|0_100
+350|550|150|100|5|ButtonBehavior2|0_255_0|true|true|true|true|GuiElementClickBehavior2|0_0|150_0|150_100|0_100

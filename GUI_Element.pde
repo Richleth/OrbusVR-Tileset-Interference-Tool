@@ -1,5 +1,5 @@
 class GuiElement {
-  private int x1, y1, x2, y2; //Controls the text area and shape location
+  private int x1, y1, w, h; //Controls the text area and shape location
   private int shapeStrokeWeight; //Controls stroke weight of the shape
   private int id; //ID of the object
   private int[][] shapeVertices; //2D Array of vertices for the shape (Format: {{x,y},{x,y},{x,y}} )
@@ -12,45 +12,50 @@ class GuiElement {
   private boolean shapeClosed; //Is shape closed
   private boolean textVisibility; //Is text visible
   private PShape shape; //Controller for the shape
-  private GuiElementBehavior guiElementBehavior; //Controller for the behavior
+  private GuiElementBehavior guiElementBehavior; //Controller for the behavior  
+  private int wlength;
+  private float tSize;
 
   private void shapeSetup() {
+    push();
     println("Shape created for GuiElement id "+id);
     if (!shapeFilled) {
-      noFill(); // Determine if shape is filled or not
+      shape.noFill(); // Determine if shape is filled or not
       println("Shape creation for GuiElement id "+id+": has noFill()");
     } else {
       fill(fillColor);
-      println("Shape creation for GuiElement id "+id+": does not have noFill()");
     }
     if (!border) {
       noStroke();
       println("Shape creation for GuiElement id "+id+": has noStroke()");
     } else {
       stroke(strokeColor);
-      println("Shape creation for GuiElement id "+id+": does not have noStroke()");
     }
+
     shape = createShape();
     shape.beginShape();
     for (int i = 0; i < shapeVertices.length; i++) { // Loop through vertices array to set shape's vertices
-      shape.vertex(shapeVertices[i][0], shapeVertices[i][1]);
+      shape.vertex(shapeVertices[i][0]+x1, shapeVertices[i][1]+y1);
       println("Shape creation for GuiElement id "+id+": Vertex created at "+(shapeVertices[i][0])+","+ (shapeVertices[i][1]));
     }
     if (shapeClosed) { // Determine if shape ends closed or not
-      endShape(CLOSE);
+      shape.endShape(CLOSE);
       println("Shape creation for GuiElement id "+id+": ended CLOSE");
     } else {
-      endShape();
+      shape.endShape();
       println("Shape creation for GuiElement id "+id+": ended default");
+      println(shapeClosed);
     }
+    pop();
   }
 
   GuiElement(int[] a, int[][] tShapeVertices, String tText, color[] tColors, boolean tBorder, boolean tShapeFilled, 
     boolean tShapeClosed, boolean tTextVisibility, GuiElementBehavior behavior) {
+    float c1 = 0.7;
     x1 = a[0];
     y1 = a[1];
-    x2 = a[2];
-    y2 = a[3];
+    w = a[2];
+    h = a[3];
     shapeStrokeWeight = a[4];
     id = a[5];
     shapeVertices = tShapeVertices;
@@ -64,12 +69,40 @@ class GuiElement {
     textVisibility = tTextVisibility;
     shapeSetup();
     guiElementBehavior = behavior;
+    // Dynamic text size
+    wlength = text.length();
+    tSize = c1*sqrt((w * h)/wlength);
   }
-  GuiElement(PShape tShape, int[] a, String tText, color tTextColor, boolean tTextVisibility, GuiElementBehavior behavior) {
+  GuiElement(int[] a, String tText, color[] tColors, boolean tBorder, boolean tShapeFilled, 
+    boolean tShapeClosed, boolean tTextVisibility, GuiElementBehavior behavior, int[][] tShapeVertices) {
+    float c1 = 0.7;
     x1 = a[0];
     y1 = a[1];
-    x2 = a[2];
-    y2 = a[3];
+    w = a[2];
+    h = a[3];
+    shapeStrokeWeight = a[4];
+    id = a[5];
+    shapeVertices = tShapeVertices;
+    text = tText;
+    strokeColor = tColors[0];
+    fillColor = tColors[1];
+    textColor = tColors[2];
+    border = tBorder;
+    shapeFilled = tShapeFilled;
+    shapeClosed = tShapeClosed;
+    textVisibility = tTextVisibility;
+    shapeSetup();
+    guiElementBehavior = behavior;
+    // Dynamic text size
+    wlength = text.length();
+    tSize = c1*sqrt((w * h)/wlength);
+  }
+  GuiElement(PShape tShape, int[] a, String tText, color tTextColor, boolean tTextVisibility, GuiElementBehavior behavior) {
+    float c1 = 0.7;
+    x1 = a[0];
+    y1 = a[1];
+    w = a[2];
+    h = a[3];
     shapeStrokeWeight = a[4];
     id = a[5];
     shape = tShape;
@@ -78,9 +111,38 @@ class GuiElement {
     textVisibility = tTextVisibility;
     shapeSetup();
     guiElementBehavior = behavior;
+    wlength = text.length();
+    tSize = c1*sqrt((w * h)/wlength);
+  }
+
+  int getButtonLocation(int i) {
+    switch(i) {
+    case 0:
+      return x1;
+    case 1:
+      return y1;
+    case 2:
+      return w;
+    case 3:
+      return h;
+    default:
+      return 0;
+    }
   }
 
   void display() {
+    push();
     shape(shape);
+    if (textVisibility) {
+      fill(textColor);
+      textSize(tSize);
+      text(text, x1+10, y1+20, w-20, h-10);
+    }
+    pop();
+  }
+  void performGuiElementBehavior() {
+    if (mouseX >= x1 && mouseY >= y1 && mouseX <= x1+w && mouseY <= y1+h) {
+      guiElementBehavior.doAction(id);
+    }
   }
 }
