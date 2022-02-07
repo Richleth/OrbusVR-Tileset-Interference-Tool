@@ -58,8 +58,8 @@ void addNames(String[] pieces, int arrayIndex) {
       println("Success 3a");
       try {
         names.add(subPieces[0]);
-        cp5.get(ScrollableList.class, "dropdown").clear();
-        cp5.get(ScrollableList.class, "dropdown").addItems(names);
+        playerDropdown.get(ScrollableList.class, "dropdown").clear();
+        playerDropdown.get(ScrollableList.class, "dropdown").addItems(names);
       } 
       catch (UnsupportedOperationException e) {
         e.printStackTrace();

@@ -31,19 +31,36 @@
  */
 
 void setup() {
+  critDamagePlusGivenMultipliers.put("0% Plus Crit Damage", 1.53);
+  critDamagePlusGivenMultipliers.put("2% Plus Crit Damage", 1.55);
+  critDamagePlusGivenMultipliers.put("4% Plus Crit Damage", 1.57);
+  critDamagePlusGivenMultipliers.put("6% Plus Crit Damage", 1.59);
+  critDamagePlusGivenMultipliers.put("8% Plus Crit Damage", 1.61);
   PFont listFont = loadFont("fontForList.vlw");
   names.add("Richleth");
   //Set Up Dropdown List\\
-  cp5 = new ControlP5(this);
-  cp5.addScrollableList("dropdown")
+  playerDropdown = new ControlP5(this);
+  playerDropdown.addScrollableList("Player_Chosen")
     .setPosition(30, 50)
-    .setSize(800, 550)
+    .setSize(395, 550)
     .setBarHeight(40)
     .setItemHeight(40)
     .addItems(names)
+    .close()
     //.setType(ScrollableList.LIST) // currently supported DROPDOWN and LIST
     ;
-  cp5.setFont(listFont, 14);
+  playerDropdown.setFont(listFont, 14);
+  critDamageDropdown = new ControlP5(this);
+  critDamageDropdown.addScrollableList("Crit_Damage")
+    .setPosition(435, 50)
+    .setSize(395, 550)
+    .setBarHeight(40)
+    .setItemHeight(40)
+    .addItems(critDamagePlusGivenLabels)
+    //.setType(ScrollableList.LIST) // currently supported DROPDOWN and LIST
+    .close()
+    ;
+  critDamageDropdown.setFont(listFont, 14);
   //GUI\\
   //Get path to combat log\\
   String path = System.getProperty("user.home");
@@ -73,7 +90,7 @@ void setup() {
   }
   addGuiButtonsFromFile();
   //guiController.createGuiElement(100, 550, 150, 100, 5, 0, new int[][] {{0, 0}, {150, 0}, {150, 100}, {0, 100}}, 
-    //"The only job is won through sheer force of will", new color[] {0, 255, 0}, true, true, true, true, new GuiElementClickBehavior0());
+  //"The only job is won through sheer force of will", new color[] {0, 255, 0}, true, true, true, true, new GuiElementClickBehavior0());
 }
 
 void draw() {
@@ -87,7 +104,7 @@ void draw() {
   //Main\\
   // Player must self report how much + % Crit Damage they have on their gear
 
-  if (nameGiven && critDamageUpGiven) {
+  if (nameGiven && critDamagePlusGiven) {
     // Crit Damage is anywhere from 1.53x to 1.61x
     // Covered by 5 GUI Elements
 
