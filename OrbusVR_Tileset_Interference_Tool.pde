@@ -67,13 +67,12 @@ void setup() {
   String[] splitPaths = split(path, "\\");
   String foundPath = join(splitPaths, "/");
   String usePath = foundPath +"/appdata/LocalLow/Orbus Online, LLC/OrbusVR/combat.log";
-  String usePath2 = "guiElements.txt";
   String[] lines = loadStrings(usePath);
   for (String i : lines) {
     charsToSkip = charsToSkip + i.length();
   }
   reader = createReader(usePath);
-  reader2 = createReader(usePath2);
+  reader2 = createReader("guiElements.txt");
   //Basic Setup\\
   size(860, 750);
   frameRate(90);
