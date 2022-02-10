@@ -75,7 +75,7 @@ void setup() {
   reader2 = createReader("guiElements.txt");
   //Basic Setup\\
   size(860, 750);
-  frameRate(90);
+  frameRate(120);
   InitLayout();
   strokeWeight(2);
   stroke(0, 0, 0);
