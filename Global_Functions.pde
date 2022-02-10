@@ -91,7 +91,7 @@ void addGuiButtonsFromFileContent() {
         //Checking to see if line2 is an example or not
       } else {
 
-        for (int i = 14; i < pieces.length; i+=2) {
+        for (int i = 15; i < pieces.length; i+=2) {
           verts.add(new int[]{int(pieces[i]), int(pieces[i+1])});
         }
         int[][] vertsConvert = new int[verts.size()][2];
@@ -101,11 +101,12 @@ void addGuiButtonsFromFileContent() {
         verts.clear();
         //min 14
         BehaviorFactory factory = new BehaviorFactory(pieces[13]);
-        GuiElementBehavior behavior = factory.createBehavior(pieces[13]);
-        color[] colors = {color(unhex(pieces[6])), color(unhex(pieces[7])), color(unhex(pieces[8]))};
+        GuiElementClickBehavior clickBehavior = factory.createClickBehavior(pieces[13]);
+        GuiElementDisplayBehavior displayBehavior = factory.createDisplayBehavior(pieces[14]);
+        color[] colors = {unhex(pieces[6]), unhex(pieces[7]), unhex(pieces[8])};
         guiController.createGuiElement(new int[] {int(pieces[0]), int(pieces[1]), int(pieces[2]), int(pieces[3]), int(pieces[4]), 
           id}, pieces[5], colors, boolean(pieces[9]), boolean(pieces[10]), 
-          boolean(pieces[11]), boolean(pieces[12]), behavior, vertsConvert);
+          boolean(pieces[11]), boolean(pieces[12]), clickBehavior, displayBehavior, vertsConvert);
         id++;
       }
     } 
