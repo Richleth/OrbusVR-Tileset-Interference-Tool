@@ -140,18 +140,17 @@ class GuiElement {
     push();
     shape(shape);
     if (textVisibility) {
-      
+
       fill(textColor);
       textSize(tSize);
       textAlign(CENTER);
       text(text, x1+5, y1+10, w-10, h-10);
-      
     }
     pop();
   }
   void performGuiElementBehavior() {
     if (mouseX >= x1 && mouseY >= y1 && mouseX <= x1+w && mouseY <= y1+h) {
-      guiElementBehavior.doClickAction(id);  
+      guiElementBehavior.doClickAction(id);
     }
   }
 }

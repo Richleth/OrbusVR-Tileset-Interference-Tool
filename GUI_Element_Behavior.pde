@@ -114,7 +114,7 @@ class GuiElementClickBehavior4 implements GuiElementClickBehavior {
 }
 
 interface GuiElementDisplayBehavior {
- void doDisplayAction(int id); 
+  void doDisplayAction(int id);
 }
 
 class GuiElementDefaultDisplayBehavior implements GuiElementDisplayBehavior {

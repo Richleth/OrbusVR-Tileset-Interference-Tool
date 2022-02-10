@@ -28,7 +28,7 @@ String[] critDamagePlusGivenLabels = {"0% Plus Crit Damage", "2% Plus Crit Damag
 //INTS\\
 int id = 0;
 //HASHMAPS\\
-HashMap<String,Float> critDamagePlusGivenMultipliers = new HashMap<String,Float>();
+HashMap<String, Float> critDamagePlusGivenMultipliers = new HashMap<String, Float>();
 //FLOATS\\
 float critDamagePlus = 1.53;
 //BOOLEANS\\
