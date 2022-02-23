@@ -18,7 +18,7 @@ ArrayList<TEXTBOX> textboxes = new ArrayList<TEXTBOX>();
 //LONGS\\
 long charsToSkip = 0;
 //STRINGS\\
-String name;
+String nameChosen;
 String findPath = null;
 String line;
 String[] lines;
@@ -31,6 +31,9 @@ int id = 0;
 HashMap<String, Float> critDamagePlusGivenMultipliers = new HashMap<String, Float>();
 //FLOATS\\
 float critDamagePlus = 1.53;
+float avgDps = 0;
+float avgDpsDifference = 0;
+float avgPercentDamageIncrease = 0;
 //BOOLEANS\\
 boolean firstHit = true;
 boolean nameGiven = false;
@@ -40,5 +43,7 @@ boolean sameName = false;
 boolean critDamagePlusGiven = false;
 //GUI MAIN\\
 GuiMain guiController = new GuiMain();
+//PLAYER DATA MAIN\\
+PlayerDataMain playerController = new PlayerDataMain();
 //ARRAYLISTS\\
 ArrayList<int[]> verts = new ArrayList<int[]>();

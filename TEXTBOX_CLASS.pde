@@ -1,3 +1,4 @@
+//Imported Class May Not Be Used
 public class TEXTBOX {
   public int X = 0, trueX = 0, Y = 0, H = 35, W = 200;
   public int TEXTSIZE = 24;

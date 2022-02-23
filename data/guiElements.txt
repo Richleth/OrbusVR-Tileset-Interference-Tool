@@ -4,4 +4,4 @@ Example|x|y|w|h|strokeWeight|text|FFstrokeColor_FFfillColor_FFtextColor|Border|F
 75|425|200|100|3|Average DPS|FF000000_FFFFFFFF_FF000000|true|true|true|true|GuiElementClickBehavior2|GuiElementNoDisplayBehavior|0_0|200_0|200_100|0_100
 325|425|200|100|3|Control and Test DPS Difference|FF000000_FFFFFFFF_FF000000|true|true|true|true|GuiElementClickBehavior3|GuiElementNoDisplayBehavior|0_0|200_0|200_100|0_100
 575|425|200|100|3|% Extra Damage Over Control|FF000000_FFFFFFFF_FF000000|true|true|true|true|GuiElementClickBehavior4|GuiElementNoDisplayBehavior|0_0|200_0|200_100|0_100
-30|100|800|300|3|MainDisplayText Affected By Variable|FF000000_FFFFFFFF_FF000000|false|true|true|true|GuiElementNoClickBehavior|GuiElementNoDisplayBehavior|0_0|800_0|800_300|0_300
+30|100|800|300|3|MainDisplayText Affected By Variable|FF000000_FFFFFFFF_FF000000|false|true|true|true|GuiElementNoClickBehavior|GuiElementTextChangeBehavior|0_0|800_0|800_300|0_300

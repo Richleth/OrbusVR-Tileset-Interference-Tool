@@ -41,6 +41,9 @@ class BehaviorFactory {
     case "GuiElementNoDisplayBehavior":
       displayBehavior = new GuiElementNoDisplayBehavior();
       break;
+    case "GuiElementTextChangeBehavior":
+      displayBehavior = new GuiElementTextChangeBehavior();
+      break;
     }
   }
 
@@ -80,54 +83,77 @@ class GuiElementNoClickBehavior implements GuiElementClickBehavior {
 class GuiElementClickBehavior0 implements GuiElementClickBehavior {
   void doClickAction(int id) {
     //Action Code
-
+    //Record Control
     println("GuiElement "+id+" performed GuiElementClickBehavior0");
   }
 }
 class GuiElementClickBehavior1 implements GuiElementClickBehavior {
   void doClickAction(int id) {
     //Action Code
-
+    //Record Test
     println("GuiElement "+id+" performed GuiElementClickBehavior1");
   }
 }
 class GuiElementClickBehavior2 implements GuiElementClickBehavior {
   void doClickAction(int id) {
     //Action Code
-
+    //AVG DPS
+    guiController.getElement(5).setElementDisplayCode(0);
     println("GuiElement "+id+" performed GuiElementClickBehavior2");
   }
 }
 class GuiElementClickBehavior3 implements GuiElementClickBehavior {
   void doClickAction(int id) {
     //Action Code
-
+    //AVG DPS DIFF
+    guiController.getElement(5).setElementDisplayCode(1);
     println("GuiElement "+id+" performed GuiElementClickBehavior3");
   }
 }
 class GuiElementClickBehavior4 implements GuiElementClickBehavior {
   void doClickAction(int id) {
     //Action Code
-
+    //% Damage Boost VS Control
+    guiController.getElement(5).setElementDisplayCode(2);
     println("GuiElement "+id+" performed GuiElementClickBehavior4");
   }
 }
 
 interface GuiElementDisplayBehavior {
-  void doDisplayAction(int id);
+  void doDisplayAction(int id, int displayCode);
 }
 
 class GuiElementDefaultDisplayBehavior implements GuiElementDisplayBehavior {
-  void doDisplayAction(int id) {
+  void doDisplayAction(int id, int displayCode) {
     //Action Code
 
-    println("GuiElement "+id+" performed GuiElementDefaultDisplayBehavior");
+    //println("GuiElement "+id+" performed GuiElementDefaultDisplayBehavior");
   }
 }
 class GuiElementNoDisplayBehavior implements GuiElementDisplayBehavior {
-  void doDisplayAction(int id) {
+  void doDisplayAction(int id, int displayCode) {
     //Action Code
-
-    println("GuiElement "+id+" does not have a click behavior");
+    //Do Nothing For Display
+    //println("GuiElement "+id+" does not have a display behavior");
+  }
+}
+class GuiElementTextChangeBehavior implements GuiElementDisplayBehavior {
+  String textToReturn = null;
+  void doDisplayAction(int id, int displayCode) {
+    switch(displayCode) {
+    case 0:
+      textToReturn = avgDps+" DPS";
+      break;
+    case 1:
+      textToReturn = avgDpsDifference+" DPS Difference"; //Temporary code
+      break;
+    case 2:
+      textToReturn = avgPercentDamageIncrease+" % Damage Increase"; //Temporary code
+      break;
+    default:
+      //textToReturn = "default"; //Temporary code
+      break;
+    }
+    guiController.getElement(id).setElementText(textToReturn);
   }
 }

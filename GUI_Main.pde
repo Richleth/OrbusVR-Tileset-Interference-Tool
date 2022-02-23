@@ -12,12 +12,15 @@ class GuiMain {
       i.performGuiElementBehavior();
     }
   }
+  
+  GuiElement getElement(int id) {
+    return guiElements.get(id);
+  }
 
-
-  void createGuiElement(int x1, int y1, int x2, int y2, int shapeStrokeWeight, int id, int[][] shapeVertices, 
+  void createGuiElement(int x1, int y1, int w, int h, int shapeStrokeWeight, int id, int[][] shapeVertices, 
     String text, color[] colors, boolean border, boolean fillVisibility, boolean shapeClosed, 
     boolean textVisibility, GuiElementClickBehavior guiElementBehavior, GuiElementDisplayBehavior displayBehavior) {
-    int[] array1 = {x1, y1, x2, y2, shapeStrokeWeight, id};
+    int[] array1 = {x1, y1, w, h, shapeStrokeWeight, id};
     guiElements.add(new GuiElement(array1, shapeVertices, text, colors, border, fillVisibility, shapeClosed, textVisibility, guiElementBehavior, displayBehavior));
   }
   void createGuiElement(int[] a, String tText, color[] tColors, boolean tBorder, boolean tShapeFilled, 

@@ -2,6 +2,7 @@ class GuiElement {
   private int x1, y1, w, h; //Controls the text area and shape location
   private int shapeStrokeWeight; //Controls stroke weight of the shape
   private int id; //ID of the object
+  private int displayCode = 0;
   private int[][] shapeVertices; //2D Array of vertices for the shape (Format: {{x,y},{x,y},{x,y}} )
   private String text; //The text that can be displayed
   private color strokeColor; //Color of lines
@@ -14,7 +15,7 @@ class GuiElement {
   private PShape shape; //Controller for the shape
   private GuiElementClickBehavior guiElementBehavior; //Controller for the click behavior 
   private GuiElementDisplayBehavior displayBehavior; //Controller for the display behavior
-  private int wlength;
+  private int wLength;
   private float tSize;
 
   private void shapeSetup() {
@@ -72,8 +73,8 @@ class GuiElement {
     guiElementBehavior = behavior;
     displayBehavior = tDisplayBehavior;
     // Dynamic text size
-    wlength = text.length();
-    tSize = c1*sqrt((w * h)/wlength);
+    wLength = text.length();
+    tSize = c1*sqrt((w * h)/wLength);
   }
   GuiElement(int[] a, String tText, color[] tColors, boolean tBorder, boolean tShapeFilled, 
     boolean tShapeClosed, boolean tTextVisibility, GuiElementClickBehavior clickBehavior, GuiElementDisplayBehavior tDisplayBehavior, int[][] tShapeVertices) {
@@ -97,8 +98,8 @@ class GuiElement {
     guiElementBehavior = clickBehavior;
     displayBehavior = tDisplayBehavior;
     // Dynamic text size
-    wlength = text.length();
-    tSize = c1*sqrt((w * h)/wlength);
+    wLength = text.length();
+    tSize = c1*sqrt((w * h)/wLength);
   }
   GuiElement(PShape tShape, int[] a, String tText, color tTextColor, boolean tTextVisibility, GuiElementClickBehavior clickBehavior, GuiElementDisplayBehavior tDisplayBehavior) {
     float c1 = 0.7;
@@ -115,8 +116,8 @@ class GuiElement {
     shapeSetup();
     guiElementBehavior = clickBehavior;
     displayBehavior = tDisplayBehavior;
-    wlength = text.length();
-    tSize = c1*sqrt((w * h)/wlength);
+    wLength = text.length();
+    tSize = c1*sqrt((w * h)/wLength);
   }
 
   int getButtonLocation(int i) {
@@ -133,17 +134,27 @@ class GuiElement {
       return 0;
     }
   }
+  
+  void setElementText(String replacementText) {
+    text = replacementText;
+  }
+  
+  void setElementDisplayCode(int code) {
+    displayCode = code;
+  }
 
   void display() {
     noFill();
     //rect(x1,y1,w,h); Rect test command for debugging purposes (click zone hitbox)
     push();
     shape(shape);
+    displayBehavior.doDisplayAction(id,displayCode);
     if (textVisibility) {
 
       fill(textColor);
       textSize(tSize);
       textAlign(CENTER);
+      
       text(text, x1+5, y1+10, w-10, h-10);
     }
     pop();
