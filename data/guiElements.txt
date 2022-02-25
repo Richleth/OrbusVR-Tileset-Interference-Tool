@@ -1,7 +1,10 @@
-Example|x|y|w|h|strokeWeight|text|FFstrokeColor_FFfillColor_FFtextColor|Border|Filled|Closed|TextVisibility|clickBehavior|displayBehavior|x_y|
-150|550|200|100|3|Record Control|FF000000_FFFFFFFF_FF000000|true|true|true|true|GuiElementClickBehavior0|GuiElementNoDisplayBehavior|0_0|200_0|200_100|0_100
-500|550|200|100|3|Record Test|FF000000_FFFFFFFF_FF000000|true|true|true|true|GuiElementClickBehavior1|GuiElementNoDisplayBehavior|0_0|200_0|200_100|0_100
-75|425|200|100|3|Average DPS|FF000000_FFFFFFFF_FF000000|true|true|true|true|GuiElementClickBehavior2|GuiElementNoDisplayBehavior|0_0|200_0|200_100|0_100
-325|425|200|100|3|Control and Test DPS Difference|FF000000_FFFFFFFF_FF000000|true|true|true|true|GuiElementClickBehavior3|GuiElementNoDisplayBehavior|0_0|200_0|200_100|0_100
-575|425|200|100|3|% Extra Damage Over Control|FF000000_FFFFFFFF_FF000000|true|true|true|true|GuiElementClickBehavior4|GuiElementNoDisplayBehavior|0_0|200_0|200_100|0_100
-30|100|800|300|3|MainDisplayText Affected By Variable|FF000000_FFFFFFFF_FF000000|false|true|true|true|GuiElementNoClickBehavior|GuiElementTextChangeBehavior|0_0|800_0|800_300|0_300
+Example|x|y|w|h|strokeWeight|text|displayCode|FFstrokeColor_FFfillColor_FFtextColor|Border|Filled|Closed|TextVisibility|clickBehavior|displayBehavior|x_y|
+150|550|200|100|3|Record Control|0|FF000000_FFFFFFFF_FF000000|true|true|true|true|GuiElementClickBehavior0|GuiElementNoDisplayBehavior|0_0|200_0|200_100|0_100
+500|550|200|100|3|Record Test|0|FF000000_FFFFFFFF_FF000000|true|true|true|true|GuiElementClickBehavior1|GuiElementNoDisplayBehavior|0_0|200_0|200_100|0_100
+30|425|250|100|3|Average DPS|0|FF000000_FFFFFFFF_FF000000|true|true|true|true|GuiElementClickBehavior2|GuiElementNoDisplayBehavior|0_0|250_0|250_100|0_100
+305|425|250|100|3|Control and Test DPS Difference|0|FF000000_FFFFFFFF_FF000000|true|true|true|true|GuiElementClickBehavior3|GuiElementNoDisplayBehavior|0_0|250_0|250_100|0_100
+580|425|250|100|3|% Extra Damage Over Control|0|FF000000_FFFFFFFF_FF000000|true|true|true|true|GuiElementClickBehavior4|GuiElementNoDisplayBehavior|0_0|250_0|250_100|0_100
+30|100|800|125|3|MainDisplayText Affected By Variable|0|FFCCCCCC_FFCCCCCC_FF000000|true|true|true|true|GuiElementNoClickBehavior|GuiElementTextChangeBehavior|0_0|800_0|800_150|0_150
+30|275|250|125|3|Control Standard Deviation|3|FFCCCCCC_FFCCCCCC_FF000000|true|true|true|true|GuiElementNoClickBehavior|GuiElementTextChangeBehavior|0_0|250_0|250_125|0_125
+305|275|250|125|3|Test Standard Deviation|4|FFCCCCCC_FFCCCCCC_FF000000|true|true|true|true|GuiElementNoClickBehavior|GuiElementTextChangeBehavior|0_0|250_0|250_125|0_125
+580|275|250|125|3|Deviation Range|5|FFCCCCCC_FFCCCCCC_FF000000|true|true|true|true|GuiElementNoClickBehavior|GuiElementTextChangeBehavior|0_0|250_0|250_125|0_125

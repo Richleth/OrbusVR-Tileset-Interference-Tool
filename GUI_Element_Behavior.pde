@@ -99,6 +99,7 @@ class GuiElementClickBehavior2 implements GuiElementClickBehavior {
     //Action Code
     //AVG DPS
     guiController.getElement(5).setElementDisplayCode(0);
+    guiController.getElement(8).setElementDisplayCode(5);
     println("GuiElement "+id+" performed GuiElementClickBehavior2");
   }
 }
@@ -107,6 +108,7 @@ class GuiElementClickBehavior3 implements GuiElementClickBehavior {
     //Action Code
     //AVG DPS DIFF
     guiController.getElement(5).setElementDisplayCode(1);
+    guiController.getElement(8).setElementDisplayCode(6);
     println("GuiElement "+id+" performed GuiElementClickBehavior3");
   }
 }
@@ -115,6 +117,7 @@ class GuiElementClickBehavior4 implements GuiElementClickBehavior {
     //Action Code
     //% Damage Boost VS Control
     guiController.getElement(5).setElementDisplayCode(2);
+    guiController.getElement(8).setElementDisplayCode(7);
     println("GuiElement "+id+" performed GuiElementClickBehavior4");
   }
 }
@@ -149,6 +152,21 @@ class GuiElementTextChangeBehavior implements GuiElementDisplayBehavior {
       break;
     case 2:
       textToReturn = avgPercentDamageIncrease+" % Damage Increase"; //Temporary code
+      break;
+    case 3:
+      textToReturn = "Control Standard Deviation: "+cStandardDeviation;
+      break;
+    case 4:
+      textToReturn = "Test Standard Deviation: "+tStandardDeviation;
+      break;
+    case 5:
+      textToReturn = "Deviation Range Case 0";
+      break;
+    case 6:
+      textToReturn = "Deviation Range Case 1";
+      break;
+    case 7:
+      textToReturn = "Deviation Range Case 2";
       break;
     default:
       //textToReturn = "default"; //Temporary code

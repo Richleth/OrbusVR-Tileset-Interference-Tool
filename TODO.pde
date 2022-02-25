@@ -1,6 +1,7 @@
 /*
- TODO: Setup both reading and writing a log with a logging class (Must attempt to read data from a generated data file for stored control data for a player at startup and must overwrite any stored data when performing a new test for control data)
- TODO: Initalize Logging class globally for data reading/writing on progam start and control test completion
  TODO: Create Testing Structure for both Control and Interference and normalize so crits do not matter (Make sure players don't use bleed as it is luck based [in an uncontrollable way] and thus interfers with testing)
- TODO: Create player class to hold data written and read from logging class
+ TODO: Provide Standard Deviation of Control and Test DPS, Mean DPS Diff Deviation Range, % Damage Increase Deviation Range
+ If control deviation is maximum in the negative and test deviation is maximum in the positive it gives the maximum for the range detailing change in DPS between control and test within 1 standard deviation
+ If control deviation is maximum in the positive and test deviation is maximum in the negative it gives the minimum for the range detailing change in DPS between control and test within 1 standard deviation
+ https://www.mathsisfun.com/data/standard-deviation.html
  */

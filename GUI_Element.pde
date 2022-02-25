@@ -2,7 +2,7 @@ class GuiElement {
   private int x1, y1, w, h; //Controls the text area and shape location
   private int shapeStrokeWeight; //Controls stroke weight of the shape
   private int id; //ID of the object
-  private int displayCode = 0;
+  private int displayCode;
   private int[][] shapeVertices; //2D Array of vertices for the shape (Format: {{x,y},{x,y},{x,y}} )
   private String text; //The text that can be displayed
   private color strokeColor; //Color of lines
@@ -21,14 +21,13 @@ class GuiElement {
   private void shapeSetup() {
     push();
     strokeWeight(shapeStrokeWeight);
+    stroke(strokeColor);
     shape = createShape();
     shape.beginShape();
     println("Shape created for GuiElement id "+id);
     if (!border) {
       shape.setVisible(false);
       println("Shape creation for GuiElement id "+id+": has noStroke()");
-    } else {
-      shape.setStroke(strokeColor);
     }
     for (int i = 0; i < shapeVertices.length; i++) { // Loop through vertices array to set shape's vertices
       shape.vertex(shapeVertices[i][0]+x1, shapeVertices[i][1]+y1);
@@ -51,7 +50,7 @@ class GuiElement {
     pop();
   }
 
-  GuiElement(int[] a, int[][] tShapeVertices, String tText, color[] tColors, boolean tBorder, boolean tShapeFilled, 
+  GuiElement(int[] a, int[][] tShapeVertices, int tDisplayCode, String tText, color[] tColors, boolean tBorder, boolean tShapeFilled, 
     boolean tShapeClosed, boolean tTextVisibility, GuiElementClickBehavior behavior, GuiElementDisplayBehavior tDisplayBehavior) {
     float c1 = 0.7;
     x1 = a[0];
@@ -61,6 +60,7 @@ class GuiElement {
     shapeStrokeWeight = a[4];
     id = a[5];
     shapeVertices = tShapeVertices;
+    displayCode = tDisplayCode;
     text = tText;
     strokeColor = tColors[0];
     fillColor = tColors[1];
@@ -76,7 +76,7 @@ class GuiElement {
     wLength = text.length();
     tSize = c1*sqrt((w * h)/wLength);
   }
-  GuiElement(int[] a, String tText, color[] tColors, boolean tBorder, boolean tShapeFilled, 
+  GuiElement(int[] a, String tText, int tDisplayCode, color[] tColors, boolean tBorder, boolean tShapeFilled, 
     boolean tShapeClosed, boolean tTextVisibility, GuiElementClickBehavior clickBehavior, GuiElementDisplayBehavior tDisplayBehavior, int[][] tShapeVertices) {
     float c1 = 0.7;
     x1 = a[0];
@@ -86,6 +86,7 @@ class GuiElement {
     shapeStrokeWeight = a[4];
     id = a[5];
     shapeVertices = tShapeVertices;
+    displayCode = tDisplayCode;
     text = tText;
     strokeColor = tColors[0];
     fillColor = tColors[1];
@@ -101,7 +102,7 @@ class GuiElement {
     wLength = text.length();
     tSize = c1*sqrt((w * h)/wLength);
   }
-  GuiElement(PShape tShape, int[] a, String tText, color tTextColor, boolean tTextVisibility, GuiElementClickBehavior clickBehavior, GuiElementDisplayBehavior tDisplayBehavior) {
+  GuiElement(PShape tShape, int[] a, String tText, int tDisplayCode, color tTextColor, boolean tTextVisibility, GuiElementClickBehavior clickBehavior, GuiElementDisplayBehavior tDisplayBehavior) {
     float c1 = 0.7;
     x1 = a[0];
     y1 = a[1];
@@ -110,6 +111,7 @@ class GuiElement {
     shapeStrokeWeight = a[4];
     id = a[5];
     shape = tShape;
+    displayCode = tDisplayCode;
     text = tText;
     textColor = tTextColor;
     textVisibility = tTextVisibility;

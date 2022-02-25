@@ -27,6 +27,9 @@ String[] lines2;
 String[] critDamagePlusGivenLabels = {"0% Plus Crit Damage", "2% Plus Crit Damage", "4% Plus Crit Damage", "6% Plus Crit Damage", "8% Plus Crit Damage"};
 //INTS\\
 int id = 0;
+int cStandardDeviation = 0;
+int tStandardDeviation = 0;
+int backgroundColor = 255;
 //HASHMAPS\\
 HashMap<String, Float> critDamagePlusGivenMultipliers = new HashMap<String, Float>();
 //FLOATS\\

@@ -93,7 +93,7 @@ void setup() {
 }
 
 void draw() {
-  background(255);
+  background(backgroundColor);
   //println(mouseX,mouseY);
 
   drawDropdownMenu();
