@@ -104,8 +104,6 @@ void draw() {
   // Player must self report how much + % Crit Damage they have on their gear
 
   if (nameGiven && critDamagePlusGiven) {
-    // Crit Damage is anywhere from 1.53x to 1.61x
-    // Covered by 5 GUI Elements
 
     // Detect Option Chosen (Record Baseline Parse [Control] or Test Interference)
     // Both will detect first hit on the player dummy then parse for 1 minute to either record a control or test against control
