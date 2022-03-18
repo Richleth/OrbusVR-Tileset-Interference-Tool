@@ -154,10 +154,10 @@ class GuiElementTextChangeBehavior implements GuiElementDisplayBehavior {
       textToReturn = avgPercentDamageIncrease+" % Damage Increase"; //Temporary code
       break;
     case 3:
-      textToReturn = "Control Standard Deviation: "+cStandardDeviation;
+      textToReturn = "Control Standard Deviation: +- "+cStandardDeviation;
       break;
     case 4:
-      textToReturn = "Test Standard Deviation: "+tStandardDeviation;
+      textToReturn = "Test Standard Deviation: +- "+tStandardDeviation;
       break;
     case 5:
       textToReturn = "Deviation Range Case 0";
