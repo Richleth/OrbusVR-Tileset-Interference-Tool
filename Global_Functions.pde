@@ -22,7 +22,7 @@ void drawDropdownMenu() {
     }
     if (line == null) {
       if (readyToParse == false) {
-        frameRate(90);
+        frameRate(360);
         println("---Ready To Parse---");
         readyToParse = true;
       }
@@ -67,6 +67,76 @@ void addNames(String[] pieces, int arrayIndex) {
     }
   }
 } 
+void parseCombatLog() {
+  try {
+      if (readyToParse == false) {
+        println("---Not Ready To Parse---");
+      }
+      line = reader.readLine();
+    } 
+    catch (IOException e) {
+      e.printStackTrace();
+      line = null;
+      println("CATCH IO");
+    }
+    if (line == null) {
+      if (readyToParse == false) {
+        frameRate(360);
+        println("---Ready To Parse---");
+        readyToParse = true;
+      }
+    } else {
+      //Below code allows for dynamic adding of names to a list
+      sameName = false;
+      String[] pieces = split(line, " "); 
+      if (pieces.length >= 7) {
+        println("Length Check Success");
+        if (pieces[pieces.length-1].equals("(Critical)")) {
+          println("length - 1 check");
+          testDataController.newDataPoint(float(pieces[pieces.length-5]), timer);
+        } else if (pieces[1].equals("[Combat]") && ((pieces[pieces.length-2].equals("from") && pieces[pieces.length-3].equals("damage")) || pieces[pieces.length-2].equals("damage"))) {
+          println("fallback");
+          testDataController.newDataPoint(float(pieces[pieces.length-4]), timer);
+        }
+      }
+    }
+}
+void parseCombatLogInit() {
+  try {
+      if (readyToParse == false) {
+        println("---Not Ready To Parse---");
+      }
+      line = reader.readLine();
+    } 
+    catch (IOException e) {
+      e.printStackTrace();
+      line = null;
+      println("CATCH IO");
+    }
+    if (line == null) {
+      if (readyToParse == false) {
+        frameRate(360);
+        println("---Ready To Parse---");
+        readyToParse = true;
+      }
+    } else {
+      //Below code allows for dynamic adding of names to a list
+      sameName = false;
+      String[] pieces = split(line, " "); 
+      if (pieces.length >= 7) {
+        println("Length Check Success");
+        if (pieces[pieces.length-1].equals("(Critical)")) {
+          println("length - 1 check");
+          testDataController.newDataPoint(float(pieces[pieces.length-5]), 1);
+          combatStarted = true;
+        } else if (pieces[1].equals("[Combat]") && ((pieces[pieces.length-2].equals("from") && pieces[pieces.length-3].equals("damage")) || pieces[pieces.length-2].equals("damage"))) {
+          println("fallback");
+          testDataController.newDataPoint(float(pieces[pieces.length-4]), 1);
+          combatStarted = true;
+        }
+      }
+    }
+}
 void addGuiButtonsFromFile() {
   addGuiButtonsFromFileContent();
   while (line2 != null) {

@@ -37,6 +37,8 @@ float critDamagePlus = 1.53;
 float avgDps = 0;
 float avgDpsDifference = 0;
 float avgPercentDamageIncrease = 0;
+final float timerConstant = 60;
+float timer = 1;
 //BOOLEANS\\
 boolean firstHit = true;
 boolean nameGiven = false;
@@ -44,9 +46,12 @@ boolean readyToParse = false;
 boolean nameDropdownMenuOpen = false;
 boolean sameName = false;
 boolean critDamagePlusGiven = false;
+boolean combatStarted = false;
 //GUI MAIN\\
 GuiMain guiController = new GuiMain();
 //PLAYER DATA MAIN\\
 PlayerDataMain playerController = new PlayerDataMain();
+//TEST DATA\\
+TestData testDataController = new TestData();
 //ARRAYLISTS\\
 ArrayList<int[]> verts = new ArrayList<int[]>();

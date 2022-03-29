@@ -11,5 +11,5 @@
  (T+Ts)-(C-Cs) = Minimum Increase Comparing Control and Test
  https://www.mathsisfun.com/data/standard-deviation.html
  https://www.calculatorsoup.com/calculators/algebra/percentage-increase-calculator.php
- TODO:
+ https://www.statisticshowto.com/combined-mean/
  */

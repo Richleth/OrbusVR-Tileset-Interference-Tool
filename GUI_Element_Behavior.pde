@@ -83,14 +83,24 @@ class GuiElementNoClickBehavior implements GuiElementClickBehavior {
 class GuiElementClickBehavior0 implements GuiElementClickBehavior {
   void doClickAction(int id) {
     //Action Code
+    if (nameGiven && critDamagePlusGiven) {
+    }
     //Record Control
+    combatStarted = false;
+    timer = 1;
+    testDataController.clearData();
     println("GuiElement "+id+" performed GuiElementClickBehavior0");
   }
 }
 class GuiElementClickBehavior1 implements GuiElementClickBehavior {
   void doClickAction(int id) {
     //Action Code
+    if (nameGiven && critDamagePlusGiven) {
+    }
     //Record Test
+    combatStarted = false;
+    timer = 1;
+    testDataController.clearData();
     println("GuiElement "+id+" performed GuiElementClickBehavior1");
   }
 }

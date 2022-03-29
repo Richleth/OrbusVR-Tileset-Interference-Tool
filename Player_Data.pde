@@ -61,3 +61,38 @@ class PlayerDataElement {
     return controlTestResult;
   }
 }
+
+class TestData {
+  private FloatList damagesDelt = new FloatList();
+  private FloatList frameDamageDelt = new FloatList();
+  private float previousTotalFrames = 0;
+  
+  // calcAvg func may return something, void may be temporary return type
+  private void calcAvg() {
+    if (frameDamageDelt.size() > 1 && damagesDelt.size() > 1) {
+      float currentHitDamageDelt = damagesDelt.get(damagesDelt.size()-1);
+      float currentHitFrameDamageDelt = frameDamageDelt.get(frameDamageDelt.size()-1) - frameDamageDelt.get(frameDamageDelt.size()-2);
+      for (int i = 1; i < frameDamageDelt.size(); i++) {
+        previousTotalFrames += frameDamageDelt.get(i-1);
+      }
+      //uses formula at https://www.statisticshowto.com/combined-mean/ to calculate damage per frame
+      float avgDpf = ((previousTotalFrames*avgDps) + (currentHitFrameDamageDelt*currentHitDamageDelt))/(previousTotalFrames+currentHitFrameDamageDelt);
+      //multiply damage per frame by framerate to get damage per second
+      avgDps = avgDpf * frameRate;
+    } else if (frameDamageDelt.size() == 1 && damagesDelt.size() == 1) {
+      float avgDpf = damagesDelt.get(damagesDelt.size()-1) / frameDamageDelt.get(frameDamageDelt.size()-1);
+      avgDps = avgDpf * frameRate;
+    }
+  }
+  
+  void newDataPoint(float d,float fd) {
+    damagesDelt.append(d);
+    frameDamageDelt.append(fd);
+    calcAvg();
+  }
+  
+  void clearData() {
+    damagesDelt.clear();
+    frameDamageDelt.clear();
+  }
+}

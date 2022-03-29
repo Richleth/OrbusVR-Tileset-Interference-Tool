@@ -75,7 +75,7 @@ void setup() {
   reader2 = createReader("guiElements.txt");
   //Basic Setup\\
   size(860, 750);
-  frameRate(120);
+  frameRate(360);
   InitLayout();
   strokeWeight(2);
   stroke(0, 0, 0);
@@ -111,6 +111,15 @@ void draw() {
     // This option will then save to a file along with any +% Crit damage
     // Testing interference you will test 1 time and the avg of this test will be compared to the control
     // This option will only be available once a control is input either by way of a loaded file on startup or after completing a recording of control
+
+    if (combatStarted) {
+      while (timer <= timerConstant*frameRate) {
+        parseCombatLog();
+        timer++;
+      }
+    } else {
+      parseCombatLogInit();
+    }
   }
 }
 void mousePressed() {
