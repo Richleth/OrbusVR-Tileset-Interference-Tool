@@ -21,7 +21,11 @@ https://wiki.thehall.xyz/wiki/Alchemy_101_/_Runes_/_Rune_Tile_Making_/_Tileset_C
 These resources go over a lot about tiles and are the main thing you need to know about tilesets. Oh how I wish we had this information back in Preborn :(
 
 # ----------IMPORTANT----------
-Users must use a non bleed weapon as bleed is inherintly luck based and will throw off results!
+Users must use a non bleed weapon as bleed is inherintly luck based and will throw off results due to extra damage delt!
+
+Users must use a non lightning forged weapon as lightning forged is inherintly luck based and will throw off results due to extra damage delt!
+
+Users must use a non lifesteal weapon as lifesteal is inherintly luck based and will throw off results due to extra tile procs!
 
 Crit however is okay as the code normalizes damage to entirely non crits. This is possible as crits are reported by the combat log and all possible crit damage multipliers are known.
  

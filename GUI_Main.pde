@@ -13,6 +13,17 @@ class GuiMain {
     }
   }
   
+  void setHidden() {
+    for (GuiElement i : guiElements) {
+      i.setHidden();
+    }
+  }
+  void setVisible() {
+    for (GuiElement i : guiElements) {
+      i.setVisible();
+    }
+  }
+  
   GuiElement getElement(int id) {
     return guiElements.get(id);
   }

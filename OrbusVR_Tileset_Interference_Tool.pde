@@ -1,4 +1,4 @@
-/**
+/** //<>//
  ----------IMPORTANT----------
  Users must use a non bleed weapon as bleed is inherintly luck based and will throw off results!
  Crit however is okay as the code normalizes damage to entirely non crits. This is possible as crits are reported by the combat log and all possible crit damage multipliers are known.
@@ -31,6 +31,7 @@
  */
 
 void setup() {
+  playerController.readPlayerDataElementsFromFile();
   critDamagePlusGivenMultipliers.put("0% Plus Crit Damage", 1.53);
   critDamagePlusGivenMultipliers.put("2% Plus Crit Damage", 1.55);
   critDamagePlusGivenMultipliers.put("4% Plus Crit Damage", 1.57);
@@ -105,25 +106,78 @@ void draw() {
 
   if (nameGiven && critDamagePlusGiven) {
 
-    // Detect Option Chosen (Record Baseline Parse [Control] or Test Interference)
-    // Both will detect first hit on the player dummy then parse for 1 minute to either record a control or test against control
-    // Recording a control you will test 1 time and the control will be set as the average control damage
-    // This option will then save to a file along with any +% Crit damage
-    // Testing interference you will test 1 time and the avg of this test will be compared to the control
-    // This option will only be available once a control is input either by way of a loaded file on startup or after completing a recording of control
+   // COMPLETE? NEEDS TESTING // Detect Option Chosen (Record Baseline Parse [Control] or Test Interference)
+   // COMPLETE? NEEDS TESTING // Both will detect first hit on the player dummy then parse for 1 minute to either record a control or test against control
+   // COMPLETE? NEEDS TESTING // Recording a control you will test 1 time and the control will be set as the average control damage
+   // COMPLETE? NEEDS TESTING // This option will then save to a file along with any +% Crit damage
+   // COMPLETE? NEEDS TESTING // Testing interference you will test 1 time and the avg of this test will be compared to the control
+   // COMPLETE? NEEDS TESTING // This option will only be available once a control is input either by way of a loaded file on startup or after completing a recording of control
 
-    if (combatStarted) {
-      while (timer <= timerConstant*frameRate) {
-        parseCombatLog();
-        timer++;
+    if (controlParse) {
+      if (combatStarted) {
+        while (timer <= timerConstant*frameRate) {
+          parseCombatLog();
+          timer++;
+        }
+        if (timer > timerConstant*frameRate) {
+          //Log player dps avg pair
+          try {
+            playerController.updatePlayerDataElement(nameChosen,avgDps); //PlayerDataElement might (likely will) need to save standard deviation data in the form of varience
+          } 
+          catch (NullPointerException e) {
+            playerController.createPlayerDataElement(nameChosen,avgDps); //PlayerDataElement might (likely will) need to save standard deviation data in the form of varience
+          }
+        }
+      } else {
+        parseCombatLogInit();
       }
-    } else {
-      parseCombatLogInit();
+    } else if (testParse && playerController.playerDataElementMatchesSelectName(nameChosen)) {
+      if (combatStarted) {
+        while (timer <= timerConstant*frameRate) {
+          parseCombatLog();
+          timer++;
+        }
+        if (timer > timerConstant*frameRate) {
+          //Log player dps avg pair
+          try {
+            playerController.updatePlayerDataElement(nameChosen,avgDps); //PlayerDataElement might (likely will) need to save standard deviation data in the form of varience
+          } 
+          catch (NullPointerException e) {
+            playerController.createPlayerDataElement(nameChosen,avgDps); //PlayerDataElement might (likely will) need to save standard deviation data in the form of varience
+          }
+        }
+      } else {
+        parseCombatLogInit();
+      }
     }
   }
+  push();
+  fill(0);
+  textSize(20);
+  text("G: Graph Mode   |   M: Main Mode", 15,height-15);
+  pop();
 }
 void mousePressed() {
   // Code to check what GUI Element is pressed
   // Buttons will be for 2 main function options and reporting the + % Crit Damage on a player's gear to counteract any crit damage
   guiController.buttonCheckMouseHovering();
+}
+void keyPressed() {
+  if (key == 'p' || key == 'P') { //<>//
+    //Litterally a command to pause debugger
+    //Click on the if statement line number in debugger mode
+    println("Pause Debugger");
+  } else if (key == 'g' || key == 'G') { //Graph Mode
+    playerDropdown.hide();
+    critDamageDropdown.hide();
+    guiController.setHidden();
+  } else if (key == 'm' || key == 'M') { //Main Mode
+    playerDropdown.show();
+    critDamageDropdown.show();
+    guiController.setVisible();
+  }
+}
+void exit() {
+  println("Exit Program");
+  playerController.writePlayerDataElementsToFile();
 }

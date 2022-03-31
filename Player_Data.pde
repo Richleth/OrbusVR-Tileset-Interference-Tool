@@ -5,22 +5,38 @@ class PlayerDataMain {
   PlayerDataElement getPlayerDataElement(String s) {
     return playerDataElements.get(s);
   }
-  
+
+  boolean playerDataElementMatchesSelectName(String s) {
+    try {
+      if (playerDataElements.get(s).equals(nameChosen)) {
+        return true;
+      } else {
+        return false;
+      }
+    } 
+    catch (NullPointerException e) {
+      e.printStackTrace();
+      return false;
+    }
+  }
+
   void updatePlayerDataElement(String pName, float controlTestR) {
     playerDataElements.get(pName).updateControlTestResult(controlTestR);
   }
-  
+
   void createPlayerDataElement(String pName, float controlTestR) {
     playerDataElements.put(pName, new PlayerDataElement(pName, controlTestR));
     playerDataElementKeys.add(pName);
   }
-  
+
   void writePlayerDataElementsToFile() {
     PrintWriter output = createWriter("data/playerDataElements.txt");
     for (int i = 0; i < playerDataElementKeys.size(); i++) {
       output.println(playerDataElementKeys.get(i)+"|"+playerDataElements.get(playerDataElementKeys.get(i)).returnControlTestResult());
       println(playerDataElementKeys.get(i)+"|"+playerDataElements.get(playerDataElementKeys.get(i)).returnControlTestResult());
     }
+    output.flush();
+    output.close();
   }
 
   void readPlayerDataElementsFromFile() {
@@ -43,22 +59,28 @@ class PlayerDataMain {
 
 class PlayerDataElement {
   private String playerName;
-  private float controlTestResult;
+  private float controlDpsResult;
+  private float testDpsResult;
+  private float dataVarience;
+  private FloatList damagesDelt = new FloatList();
+  private FloatList frameDamageDelt = new FloatList();
+  private int[][] tilesets = new int[5][6];
+  private String[] weaponAffixes; //uses _ notation EX: lightning_forged
 
-  PlayerDataElement(String pName, float controlTestR) {
+  PlayerDataElement(String pName, float tControlDpsResult) {
     playerName = pName;
-    controlTestResult = controlTestR;
+    controlDpsResult = tControlDpsResult;
   }
-  
-  void updateControlTestResult(float controlTestR) {
-    controlTestResult = controlTestR;
+
+  void updateControlTestResult(float tControlDpsResult) {
+    controlDpsResult = tControlDpsResult;
   }
 
   String returnPlayerName() {
     return playerName;
   }
   float returnControlTestResult() {
-    return controlTestResult;
+    return controlDpsResult;
   }
 }
 
@@ -66,7 +88,7 @@ class TestData {
   private FloatList damagesDelt = new FloatList();
   private FloatList frameDamageDelt = new FloatList();
   private float previousTotalFrames = 0;
-  
+
   // calcAvg func may return something, void may be temporary return type
   private void calcAvg() {
     if (frameDamageDelt.size() > 1 && damagesDelt.size() > 1) {
@@ -84,13 +106,13 @@ class TestData {
       avgDps = avgDpf * frameRate;
     }
   }
-  
-  void newDataPoint(float d,float fd) {
+
+  void newDataPoint(float d, float fd) {
     damagesDelt.append(d);
     frameDamageDelt.append(fd);
     calcAvg();
   }
-  
+
   void clearData() {
     damagesDelt.clear();
     frameDamageDelt.clear();

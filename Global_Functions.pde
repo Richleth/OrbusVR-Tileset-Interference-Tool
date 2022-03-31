@@ -91,10 +91,11 @@ void parseCombatLog() {
       String[] pieces = split(line, " "); 
       if (pieces.length >= 7) {
         println("Length Check Success");
-        if (pieces[pieces.length-1].equals("(Critical)")) {
+        if (pieces[pieces.length-1].equals("(Critical)") && pieces[pieces.length-2].equals(nameChosen)) {
           println("length - 1 check");
-          testDataController.newDataPoint(float(pieces[pieces.length-5]), timer);
-        } else if (pieces[1].equals("[Combat]") && ((pieces[pieces.length-2].equals("from") && pieces[pieces.length-3].equals("damage")) || pieces[pieces.length-2].equals("damage"))) {
+          float damageWithoutCrit = float(pieces[pieces.length-5])/critDamagePlus;
+          testDataController.newDataPoint(damageWithoutCrit, 1);
+        } else if (pieces[pieces.length-1].equals(nameChosen) && pieces[1].equals("[Combat]") && ((pieces[pieces.length-2].equals("from") && pieces[pieces.length-3].equals("damage")) || pieces[pieces.length-2].equals("damage"))) {
           println("fallback");
           testDataController.newDataPoint(float(pieces[pieces.length-4]), timer);
         }
@@ -125,11 +126,12 @@ void parseCombatLogInit() {
       String[] pieces = split(line, " "); 
       if (pieces.length >= 7) {
         println("Length Check Success");
-        if (pieces[pieces.length-1].equals("(Critical)")) {
+        if (pieces[pieces.length-1].equals("(Critical)") && pieces[pieces.length-2].equals(nameChosen)) {
           println("length - 1 check");
-          testDataController.newDataPoint(float(pieces[pieces.length-5]), 1);
+          float damageWithoutCrit = float(pieces[pieces.length-5])/critDamagePlus;
+          testDataController.newDataPoint(damageWithoutCrit, 1);
           combatStarted = true;
-        } else if (pieces[1].equals("[Combat]") && ((pieces[pieces.length-2].equals("from") && pieces[pieces.length-3].equals("damage")) || pieces[pieces.length-2].equals("damage"))) {
+        } else if (pieces[pieces.length-1].equals(nameChosen) && pieces[1].equals("[Combat]") && ((pieces[pieces.length-2].equals("from") && pieces[pieces.length-3].equals("damage")) || pieces[pieces.length-2].equals("damage"))) {
           println("fallback");
           testDataController.newDataPoint(float(pieces[pieces.length-4]), 1);
           combatStarted = true;

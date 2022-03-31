@@ -12,6 +12,7 @@ class GuiElement {
   private boolean shapeFilled; //Does shape have fill
   private boolean shapeClosed; //Is shape closed
   private boolean textVisibility; //Is text visible
+  private boolean hidden = false; //Fully controls button visibility
   private PShape shape; //Controller for the shape
   private GuiElementClickBehavior guiElementBehavior; //Controller for the click behavior 
   private GuiElementDisplayBehavior displayBehavior; //Controller for the display behavior
@@ -136,33 +137,42 @@ class GuiElement {
       return 0;
     }
   }
-  
+
+  void setHidden() {
+    hidden = true;
+  }
+  void setVisible() {
+    hidden = false;
+  }
+
   void setElementText(String replacementText) {
     text = replacementText;
   }
-  
+
   void setElementDisplayCode(int code) {
     displayCode = code;
   }
 
   void display() {
-    noFill();
-    //rect(x1,y1,w,h); Rect test command for debugging purposes (click zone hitbox)
-    push();
-    shape(shape);
-    displayBehavior.doDisplayAction(id,displayCode);
-    if (textVisibility) {
+    if (!hidden) {
+      noFill();
+      //rect(x1,y1,w,h); Rect test command for debugging purposes (click zone hitbox)
+      push();
+      shape(shape);
+      displayBehavior.doDisplayAction(id, displayCode);
+      if (textVisibility) {
 
-      fill(textColor);
-      textSize(tSize);
-      textAlign(CENTER);
-      
-      text(text, x1+5, y1+10, w-10, h-10);
+        fill(textColor);
+        textSize(tSize);
+        textAlign(CENTER);
+
+        text(text, x1+5, y1+10, w-10, h-10);
+      }
+      pop();
     }
-    pop();
   }
   void performGuiElementBehavior() {
-    if (mouseX >= x1 && mouseY >= y1 && mouseX <= x1+w && mouseY <= y1+h) {
+    if (mouseX >= x1 && mouseY >= y1 && mouseX <= x1+w && mouseY <= y1+h && !hidden) {
       guiElementBehavior.doClickAction(id);
     }
   }

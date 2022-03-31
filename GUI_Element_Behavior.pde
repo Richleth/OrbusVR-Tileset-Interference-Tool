@@ -87,6 +87,8 @@ class GuiElementClickBehavior0 implements GuiElementClickBehavior {
     }
     //Record Control
     combatStarted = false;
+    controlParse = true;
+    testParse = false;
     timer = 1;
     testDataController.clearData();
     println("GuiElement "+id+" performed GuiElementClickBehavior0");
@@ -99,6 +101,8 @@ class GuiElementClickBehavior1 implements GuiElementClickBehavior {
     }
     //Record Test
     combatStarted = false;
+    controlParse = false;
+    testParse = true;
     timer = 1;
     testDataController.clearData();
     println("GuiElement "+id+" performed GuiElementClickBehavior1");

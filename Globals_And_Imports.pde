@@ -40,8 +40,9 @@ float avgPercentDamageIncrease = 0;
 final float timerConstant = 60;
 float timer = 1;
 //BOOLEANS\\
-boolean firstHit = true;
 boolean nameGiven = false;
+boolean controlParse = false;
+boolean testParse = false;
 boolean readyToParse = false;
 boolean nameDropdownMenuOpen = false;
 boolean sameName = false;
