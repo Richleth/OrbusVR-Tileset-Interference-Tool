@@ -69,75 +69,75 @@ void addNames(String[] pieces, int arrayIndex) {
 } 
 void parseCombatLog() {
   try {
-      if (readyToParse == false) {
-        println("---Not Ready To Parse---");
-      }
-      line = reader.readLine();
-    } 
-    catch (IOException e) {
-      e.printStackTrace();
-      line = null;
-      println("CATCH IO");
+    if (readyToParse == false) {
+      println("---Not Ready To Parse---");
     }
-    if (line == null) {
-      if (readyToParse == false) {
-        frameRate(360);
-        println("---Ready To Parse---");
-        readyToParse = true;
-      }
-    } else {
-      //Below code allows for dynamic adding of names to a list
-      sameName = false;
-      String[] pieces = split(line, " "); 
-      if (pieces.length >= 7) {
-        println("Length Check Success");
-        if (pieces[pieces.length-1].equals("(Critical)") && pieces[pieces.length-2].equals(nameChosen)) {
-          println("length - 1 check");
-          float damageWithoutCrit = float(pieces[pieces.length-5])/critDamagePlus;
-          testDataController.newDataPoint(damageWithoutCrit, 1);
-        } else if (pieces[pieces.length-1].equals(nameChosen) && pieces[1].equals("[Combat]") && ((pieces[pieces.length-2].equals("from") && pieces[pieces.length-3].equals("damage")) || pieces[pieces.length-2].equals("damage"))) {
-          println("fallback");
-          testDataController.newDataPoint(float(pieces[pieces.length-4]), timer);
-        }
+    line = reader.readLine();
+  } 
+  catch (IOException e) {
+    e.printStackTrace();
+    line = null;
+    println("CATCH IO");
+  }
+  if (line == null) {
+    if (readyToParse == false) {
+      frameRate(360);
+      println("---Ready To Parse---");
+      readyToParse = true;
+    }
+  } else {
+    //Below code allows for dynamic adding of names to a list
+    sameName = false;
+    String[] pieces = split(line, " "); 
+    if (pieces.length >= 7) {
+      println("Length Check Success");
+      if (pieces[pieces.length-1].equals("(Critical)") && pieces[pieces.length-2].equals(nameChosen)) {
+        println("length - 1 check");
+        float damageWithoutCrit = float(pieces[pieces.length-5])/critDamagePlus;
+        testDataController.newDataPoint(damageWithoutCrit, 1);
+      } else if (pieces[pieces.length-1].equals(nameChosen) && pieces[1].equals("[Combat]") && ((pieces[pieces.length-2].equals("from") && pieces[pieces.length-3].equals("damage")) || pieces[pieces.length-2].equals("damage"))) {
+        println("fallback");
+        testDataController.newDataPoint(float(pieces[pieces.length-4]), timer);
       }
     }
+  }
 }
 void parseCombatLogInit() {
   try {
-      if (readyToParse == false) {
-        println("---Not Ready To Parse---");
-      }
-      line = reader.readLine();
-    } 
-    catch (IOException e) {
-      e.printStackTrace();
-      line = null;
-      println("CATCH IO");
+    if (readyToParse == false) {
+      println("---Not Ready To Parse---");
     }
-    if (line == null) {
-      if (readyToParse == false) {
-        frameRate(360);
-        println("---Ready To Parse---");
-        readyToParse = true;
-      }
-    } else {
-      //Below code allows for dynamic adding of names to a list
-      sameName = false;
-      String[] pieces = split(line, " "); 
-      if (pieces.length >= 7) {
-        println("Length Check Success");
-        if (pieces[pieces.length-1].equals("(Critical)") && pieces[pieces.length-2].equals(nameChosen)) {
-          println("length - 1 check");
-          float damageWithoutCrit = float(pieces[pieces.length-5])/critDamagePlus;
-          testDataController.newDataPoint(damageWithoutCrit, 1);
-          combatStarted = true;
-        } else if (pieces[pieces.length-1].equals(nameChosen) && pieces[1].equals("[Combat]") && ((pieces[pieces.length-2].equals("from") && pieces[pieces.length-3].equals("damage")) || pieces[pieces.length-2].equals("damage"))) {
-          println("fallback");
-          testDataController.newDataPoint(float(pieces[pieces.length-4]), 1);
-          combatStarted = true;
-        }
+    line = reader.readLine();
+  } 
+  catch (IOException e) {
+    e.printStackTrace();
+    line = null;
+    println("CATCH IO");
+  }
+  if (line == null) {
+    if (readyToParse == false) {
+      frameRate(360);
+      println("---Ready To Parse---");
+      readyToParse = true;
+    }
+  } else {
+    //Below code allows for dynamic adding of names to a list
+    sameName = false;
+    String[] pieces = split(line, " "); 
+    if (pieces.length >= 7) {
+      println("Length Check Success");
+      if (pieces[pieces.length-1].equals("(Critical)") && pieces[pieces.length-2].equals(nameChosen)) {
+        println("length - 1 check");
+        float damageWithoutCrit = float(pieces[pieces.length-5])/critDamagePlus;
+        testDataController.newDataPoint(damageWithoutCrit, 1);
+        combatStarted = true;
+      } else if (pieces[pieces.length-1].equals(nameChosen) && pieces[1].equals("[Combat]") && ((pieces[pieces.length-2].equals("from") && pieces[pieces.length-3].equals("damage")) || pieces[pieces.length-2].equals("damage"))) {
+        println("fallback");
+        testDataController.newDataPoint(float(pieces[pieces.length-4]), 1);
+        combatStarted = true;
       }
     }
+  }
 }
 void addGuiButtonsFromFile() {
   addGuiButtonsFromFileContent();
@@ -177,7 +177,7 @@ void addGuiButtonsFromFileContent() {
         GuiElementDisplayBehavior displayBehavior = factory.createDisplayBehavior(pieces[15]);
         color[] colors = {unhex(pieces[7]), unhex(pieces[8]), unhex(pieces[9])};
         guiController.createGuiElement(new int[] {int(pieces[0]), int(pieces[1]), int(pieces[2]), int(pieces[3]), int(pieces[4]), 
-          id}, pieces[5],int(pieces[6]), colors, boolean(pieces[10]), boolean(pieces[11]), 
+          id}, pieces[5], int(pieces[6]), colors, boolean(pieces[10]), boolean(pieces[11]), 
           boolean(pieces[12]), boolean(pieces[13]), clickBehavior, displayBehavior, vertsConvert);
         id++;
       }
@@ -186,4 +186,23 @@ void addGuiButtonsFromFileContent() {
       e.printStackTrace();
     }
   }
+}
+JSONObject newData() {
+  JSONObject controlData = new JSONObject();
+  controlData.setString("playerName", nameChosen);
+  controlData.setFloat("controlDpsResult", avgDps);
+  controlData.setFloat("testDpsResult", avgDps);
+  //Need to calculate data varience here
+  float varience = 0;
+  for (int i = 0; i < damagesDelt.size(); i++) {
+    varience += sq(damagesDelt.getFloat(i)-avgDps);
+  }
+  varience = varience/damagesDelt.size();
+  controlData.setFloat("controlDataVarience", varience);
+  controlData.setFloat("testDataVarience", varience);
+  controlData.setJSONArray("damagesDelt", damagesDelt);
+  controlData.setJSONArray("frameDamageDelt", frameDamageDelt);
+  controlData.setJSONObject("tilesets", new JSONObject()); //TO BE IMPLEMENTED LATER
+  controlData.setJSONArray("frameDamageDelt", new JSONArray()); //TO BE IMPLEMENTED LATER
+  return controlData;
 }

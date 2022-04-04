@@ -1,0 +1,58 @@
+{
+  "names": [{"name": "Richleth"}],
+  "Richleth": [{
+    "testDataVarience": 0,
+    "damagesDelt": [],
+    "playerName": "Richleth",
+    "weaponAffixes": [{
+      "affix2": "",
+      "affix1": ""
+    }],
+    "frameDamageDelt": [],
+    "tilesets": {
+      "head": [
+        {},
+        {},
+        {},
+        {},
+        {},
+        {}
+      ],
+      "weapon": [
+        {},
+        {},
+        {},
+        {},
+        {},
+        {}
+      ],
+      "chest": [
+        {},
+        {},
+        {},
+        {},
+        {},
+        {}
+      ],
+      "gloves": [
+        {},
+        {},
+        {},
+        {},
+        {},
+        {}
+      ],
+      "body": [
+        {},
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    "testDpsResult": 0,
+    "controlDataVarience": 0,
+    "controlDpsResult": 0
+  }]
+}

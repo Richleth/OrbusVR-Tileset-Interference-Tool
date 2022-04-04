@@ -9,12 +9,16 @@ import java.awt.Dimension;
 GPlot graph;
 ControlP5 playerDropdown;
 ControlP5 critDamageDropdown;
+//JSON ARRAYS\\
+JSONArray damagesDelt = new JSONArray();
+JSONArray frameDamageDelt = new JSONArray();
 //BUFFERED READER\\
 BufferedReader reader;
 BufferedReader reader2;
 //ARRAYLIST\\
 ArrayList names = new ArrayList();
 ArrayList<TEXTBOX> textboxes = new ArrayList<TEXTBOX>();
+ArrayList<int[]> verts = new ArrayList<int[]>();
 //LONGS\\
 long charsToSkip = 0;
 //STRINGS\\
@@ -54,5 +58,3 @@ GuiMain guiController = new GuiMain();
 PlayerDataMain playerController = new PlayerDataMain();
 //TEST DATA\\
 TestData testDataController = new TestData();
-//ARRAYLISTS\\
-ArrayList<int[]> verts = new ArrayList<int[]>();

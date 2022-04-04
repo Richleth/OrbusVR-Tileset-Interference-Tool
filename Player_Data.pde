@@ -1,6 +1,9 @@
 class PlayerDataMain {
   private HashMap<String, PlayerDataElement> playerDataElements = new HashMap<String, PlayerDataElement>();
   private ArrayList<String> playerDataElementKeys = new ArrayList<String>();
+  private JSONObject mainData = new JSONObject();
+  private JSONArray jsonPlayerDataElements = new JSONArray();
+  private JSONArray jsonPlayerDataElementKeys = new JSONArray();
 
   PlayerDataElement getPlayerDataElement(String s) {
     return playerDataElements.get(s);
@@ -20,16 +23,39 @@ class PlayerDataMain {
     }
   }
 
-  void updatePlayerDataElement(String pName, float controlTestR) {
-    playerDataElements.get(pName).updateControlTestResult(controlTestR);
+  void updatePlayerDataElement(JSONObject data, String tPlayerName, String[] dataToUpdate) {
+    playerDataElements.get(tPlayerName).updateData(dataToUpdate, data); // NEED TO ADD THE REST OF RESULTS
+  }
+  void updatePlayerDataElementTest(JSONObject data, String tPlayerName, String[] dataToUpdate) {
+    playerDataElements.get(tPlayerName).updateData(dataToUpdate, data); // NEED TO ADD THE REST OF RESULTS
   }
 
-  void createPlayerDataElement(String pName, float controlTestR) {
-    playerDataElements.put(pName, new PlayerDataElement(pName, controlTestR));
-    playerDataElementKeys.add(pName);
+  void createPlayerDataElement(JSONObject data, String tPlayerName) {
+    playerDataElements.put(tPlayerName, new PlayerDataElement(data, tPlayerName)); //UPDATED CONSTRUCTOR NEEDS CHANGING TEST RESULT = 0 DUE TO ONLY BEING CREATED IN A CONTROL PARSE
+    playerDataElementKeys.add(tPlayerName);
   }
 
   void writePlayerDataElementsToFile() {
+    // Use JSON Object instead
+    JSONObject writePlayerData = new JSONObject();
+    JSONArray nameValues = new JSONArray();
+    JSONArray playerDataValues = new JSONArray();
+    for (int i = 0; i < playerDataElementKeys.size(); i++) {
+      JSONObject dataObject = new JSONObject();
+      dataObject.setString("name", playerDataElementKeys.get(i));
+      nameValues.setJSONObject(i, dataObject);
+      JSONObject playerDataObject = playerDataElements.get(playerDataElementKeys.get(i)).returnAllObjectData(); //SOMETHING WRONG HERE
+      playerDataValues.setJSONObject(i, playerDataObject);
+      // NEED TO MAKE SURE THE DATA IS UP TO DATE IN OBJECT
+    }
+    writePlayerData.setJSONArray("names", nameValues);
+    for (int i = 0; i < playerDataElementKeys.size(); i++) {
+      writePlayerData.setJSONArray(playerDataElementKeys.get(i), playerDataValues);
+    }
+    
+    println(writePlayerData);
+    // JSON Must write keys for player names to another object in the same JSON file
+    saveJSONObject(writePlayerData, "data/playerDataElementsTest.json");
     PrintWriter output = createWriter("data/playerDataElements.txt");
     for (int i = 0; i < playerDataElementKeys.size(); i++) {
       output.println(playerDataElementKeys.get(i)+"|"+playerDataElements.get(playerDataElementKeys.get(i)).returnControlTestResult());
@@ -40,40 +66,94 @@ class PlayerDataMain {
   }
 
   void readPlayerDataElementsFromFile() {
-    BufferedReader playerDataElementReader = createReader("data/playerDataElements.txt");
-    String line = null;
-    try {
-      while ((line = playerDataElementReader.readLine()) != null) {
-        String[] pieces = split(line, "|");
-        String pName = pieces[0];
-        float controlTestR = float(pieces[1]);
-        createPlayerDataElement(pName, controlTestR);
-      }
-      playerDataElementReader.close();
-    } 
-    catch (IOException e) {
-      e.printStackTrace();
+    // Use JSON Object instead
+    JSONObject savedPlayerData = loadJSONObject("data/playerDataElements.json");
+    //MUST SOMEHOW READ AND GET ALL ELEMENTS
+    for (int i = 0; i < savedPlayerData.getJSONArray("names").size(); i++) {
+      String playerName = savedPlayerData.getJSONArray("names").getJSONObject(i).getString("name");
+      /* Old Vars
+       float controlDpsResult = savedPlayerData.getFloat("controlDpsResult");
+       float testDpsResult = savedPlayerData.getFloat("testDpsResult");
+       float dataVarience = savedPlayerData.getFloat("dataVarience");
+       JSONArray damagesDelt = savedPlayerData.getJSONArray("damagesDelt");
+       JSONArray frameDamageDelt = savedPlayerData.getJSONArray("frameDamageDelt");
+       JSONObject tilesets = savedPlayerData.getJSONObject("tilesets");
+       JSONArray weaponAffixes = savedPlayerData.getJSONArray("weaponAffixes");
+       */
+      println(playerName);
+      createPlayerDataElement(savedPlayerData, playerName);
     }
   }
 }
 
 class PlayerDataElement {
+  private JSONObject data; // Has all below params
   private String playerName;
   private float controlDpsResult;
   private float testDpsResult;
-  private float dataVarience;
-  private FloatList damagesDelt = new FloatList();
-  private FloatList frameDamageDelt = new FloatList();
-  private int[][] tilesets = new int[5][6];
-  private String[] weaponAffixes; //uses _ notation EX: lightning_forged
+  private float controlDataVarience;  
+  private float testDataVarience;  
+  private JSONArray damagesDelt;
+  private JSONArray frameDamageDelt;
+  // Below Params are for when API is Implemented
+  private JSONObject tilesets;
+  private JSONArray weaponAffixes; //uses _ notation EX: lightning_forged
 
-  PlayerDataElement(String pName, float tControlDpsResult) {
-    playerName = pName;
-    controlDpsResult = tControlDpsResult;
+
+  PlayerDataElement(JSONObject tData, String tName) {
+    data = tData;
+    playerName = data.getJSONArray(tName).getJSONObject(0).getString("playerName");
+    controlDpsResult = data.getJSONArray(tName).getJSONObject(0).getFloat("controlDpsResult");
+    testDpsResult = data.getJSONArray(tName).getJSONObject(0).getFloat("testDpsResult");
+    controlDataVarience = data.getJSONArray(tName).getJSONObject(0).getFloat("controlDataVarience");
+    testDataVarience = data.getJSONArray(tName).getJSONObject(0).getFloat("testDataVarience");
+    damagesDelt = data.getJSONArray(tName).getJSONObject(0).getJSONArray("damagesDelt");
+    frameDamageDelt = data.getJSONArray(tName).getJSONObject(0).getJSONArray("frameDamageDelt");
+    tilesets = data.getJSONArray(tName).getJSONObject(0).getJSONObject("tilesets");
+    weaponAffixes = data.getJSONArray(tName).getJSONObject(0).getJSONArray("weaponAffixes");
   }
-
-  void updateControlTestResult(float tControlDpsResult) {
-    controlDpsResult = tControlDpsResult;
+  void updateData(String[] keysToUpdate, JSONObject data) {
+    for (int i = 0; i < keysToUpdate.length; i++) {
+      switch (keysToUpdate[i]) {
+      case "controlDpsResult":
+        controlDpsResult = data.getFloat("controlDpsResult");
+        break;
+      case "testDpsResult":
+        testDpsResult = data.getFloat("testDpsResult");
+        break;
+      case "controlDataVarience":
+        controlDataVarience = data.getFloat("controlDataVarience");
+        break;
+      case "testDataVarience":
+        testDataVarience = data.getFloat("testDataVarience");
+        break;
+      case "damagesDelt":
+        damagesDelt = data.getJSONArray("damagesDelt");
+        break;
+      case "frameDamageDelt":
+        frameDamageDelt = data.getJSONArray("frameDamageDelt");
+        break;
+      case "tilesets":
+        tilesets = data.getJSONObject("tilesets");
+        break;
+      case "weaponAffixes":
+        weaponAffixes = data.getJSONArray("weaponAffixes");
+        break;
+      }
+    }
+  }
+  JSONObject returnAllObjectData() {
+    JSONObject playerDataObject = new JSONObject();    
+    playerDataObject.setString("playerName", playerName);
+    playerDataObject.setFloat("controlDpsResult", controlDpsResult);
+    playerDataObject.setFloat("testDpsResult", testDpsResult);
+    playerDataObject.setFloat("controlDataVarience", controlDataVarience);
+    playerDataObject.setFloat("testDataVarience", testDataVarience);    
+    playerDataObject.setJSONArray("damagesDelt", damagesDelt);
+    playerDataObject.setJSONArray("frameDamageDelt", frameDamageDelt);
+    playerDataObject.setJSONObject("tilesets", tilesets);
+    playerDataObject.setJSONArray("weaponAffixes", weaponAffixes); //<>//
+    return playerDataObject;
   }
 
   String returnPlayerName() {
