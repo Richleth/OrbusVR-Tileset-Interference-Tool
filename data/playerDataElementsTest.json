@@ -2,7 +2,9 @@
   "names": [{"name": "Richleth"}],
   "Richleth": [{
     "testDataVarience": 0,
+    "controlDpsData": [{}],
     "damagesDelt": [],
+    "testDpsData": [{}],
     "playerName": "Richleth",
     "weaponAffixes": [{
       "affix2": "",

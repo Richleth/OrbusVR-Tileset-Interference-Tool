@@ -1,4 +1,4 @@
-class PlayerDataMain {
+class PlayerDataMain { //<>//
   private HashMap<String, PlayerDataElement> playerDataElements = new HashMap<String, PlayerDataElement>();
   private ArrayList<String> playerDataElementKeys = new ArrayList<String>();
   private JSONObject mainData = new JSONObject();
@@ -52,7 +52,7 @@ class PlayerDataMain {
     for (int i = 0; i < playerDataElementKeys.size(); i++) {
       writePlayerData.setJSONArray(playerDataElementKeys.get(i), playerDataValues);
     }
-    
+
     println(writePlayerData);
     // JSON Must write keys for player names to another object in the same JSON file
     saveJSONObject(writePlayerData, "data/playerDataElementsTest.json");
@@ -90,7 +90,9 @@ class PlayerDataElement {
   private JSONObject data; // Has all below params
   private String playerName;
   private float controlDpsResult;
+  private JSONArray controlDpsData;
   private float testDpsResult;
+  private JSONArray testDpsData;
   private float controlDataVarience;  
   private float testDataVarience;  
   private JSONArray damagesDelt;
@@ -104,7 +106,9 @@ class PlayerDataElement {
     data = tData;
     playerName = data.getJSONArray(tName).getJSONObject(0).getString("playerName");
     controlDpsResult = data.getJSONArray(tName).getJSONObject(0).getFloat("controlDpsResult");
+    controlDpsData = data.getJSONArray(tName).getJSONObject(0).getJSONArray("controlDpsData");
     testDpsResult = data.getJSONArray(tName).getJSONObject(0).getFloat("testDpsResult");
+    testDpsData = data.getJSONArray(tName).getJSONObject(0).getJSONArray("testDpsData");
     controlDataVarience = data.getJSONArray(tName).getJSONObject(0).getFloat("controlDataVarience");
     testDataVarience = data.getJSONArray(tName).getJSONObject(0).getFloat("testDataVarience");
     damagesDelt = data.getJSONArray(tName).getJSONObject(0).getJSONArray("damagesDelt");
@@ -120,6 +124,12 @@ class PlayerDataElement {
         break;
       case "testDpsResult":
         testDpsResult = data.getFloat("testDpsResult");
+        break;
+      case "controlDpsData":
+        controlDpsData = data.getJSONArray("controlDpsData");
+        break;
+      case "testDpsData":
+        testDpsData = data.getJSONArray("testDpsData");
         break;
       case "controlDataVarience":
         controlDataVarience = data.getFloat("controlDataVarience");
@@ -152,8 +162,11 @@ class PlayerDataElement {
     playerDataObject.setJSONArray("damagesDelt", damagesDelt);
     playerDataObject.setJSONArray("frameDamageDelt", frameDamageDelt);
     playerDataObject.setJSONObject("tilesets", tilesets);
-    playerDataObject.setJSONArray("weaponAffixes", weaponAffixes); //<>//
-    return playerDataObject;
+    playerDataObject.setJSONArray("weaponAffixes", weaponAffixes);
+    playerDataObject.setJSONArray("controlDpsData", controlDpsData);
+    playerDataObject.setJSONArray("testDpsData", testDpsData);
+    println(playerDataObject);
+    return playerDataObject; //<>//
   }
 
   String returnPlayerName() {
@@ -167,6 +180,8 @@ class PlayerDataElement {
 class TestData {
   private FloatList damagesDelt = new FloatList();
   private FloatList frameDamageDelt = new FloatList();
+  private FloatList controlDpsAverages = new FloatList();
+  private FloatList testDpsAverages = new FloatList();
   private float previousTotalFrames = 0;
 
   // calcAvg func may return something, void may be temporary return type
@@ -174,9 +189,7 @@ class TestData {
     if (frameDamageDelt.size() > 1 && damagesDelt.size() > 1) {
       float currentHitDamageDelt = damagesDelt.get(damagesDelt.size()-1);
       float currentHitFrameDamageDelt = frameDamageDelt.get(frameDamageDelt.size()-1) - frameDamageDelt.get(frameDamageDelt.size()-2);
-      for (int i = 1; i < frameDamageDelt.size(); i++) {
-        previousTotalFrames += frameDamageDelt.get(i-1);
-      }
+      previousTotalFrames = frameDamageDelt.get(frameDamageDelt.size()-2);
       //uses formula at https://www.statisticshowto.com/combined-mean/ to calculate damage per frame
       float avgDpf = ((previousTotalFrames*avgDps) + (currentHitFrameDamageDelt*currentHitDamageDelt))/(previousTotalFrames+currentHitFrameDamageDelt);
       //multiply damage per frame by framerate to get damage per second
@@ -184,7 +197,71 @@ class TestData {
     } else if (frameDamageDelt.size() == 1 && damagesDelt.size() == 1) {
       float avgDpf = damagesDelt.get(damagesDelt.size()-1) / frameDamageDelt.get(frameDamageDelt.size()-1);
       avgDps = avgDpf * frameRate;
+      controlDpsAverages.append(avgDps);
     }
+  }
+
+  JSONObject returnFloatLists() {
+    JSONObject objectToReturn = new JSONObject();
+    JSONArray damageDataToReturn = new JSONArray();
+    JSONArray frameDataToReturn = new JSONArray();
+    JSONArray controlDpsDataToReturn = new JSONArray();
+    JSONArray testDpsDataToReturn = new JSONArray();
+    for (int i = 0; i < damagesDelt.size(); i++) {
+      try {
+        JSONObject damageData = new JSONObject();
+        damageData.setFloat("damageDataToReturn", damagesDelt.get(i));
+        damageDataToReturn.setJSONObject(i, damageData);
+      } 
+      catch(ArrayIndexOutOfBoundsException e) {
+        JSONObject damageData = new JSONObject();
+        damageData.setFloat("damageDataToReturn", 0);
+        damageDataToReturn.setJSONObject(i, damageData);
+      }
+      //println(damageDataToReturn.getJSONArray(0));
+    }
+    for (int i = 0; i < frameDamageDelt.size(); i++) {
+      try {
+        JSONObject frameData = new JSONObject();
+        frameData.setFloat("frameDataToReturn", frameDamageDelt.get(i));
+        frameDataToReturn.setJSONObject(i, frameData);
+      } 
+      catch(ArrayIndexOutOfBoundsException e) {
+        JSONObject frameData = new JSONObject();
+        frameData.setFloat("frameDataToReturn", 0);
+        frameDataToReturn.setJSONObject(i, frameData);
+      }
+    }
+    for (int i = 0; i < controlDpsDataToReturn.size(); i++) {
+      try {
+        JSONObject dpsData = new JSONObject();
+        dpsData.setFloat("controlDpsDataToReturn", controlDpsAverages.get(i));
+        controlDpsDataToReturn.setJSONObject(i, dpsData);
+      } 
+      catch(ArrayIndexOutOfBoundsException e) {
+        JSONObject dpsData = new JSONObject();
+        dpsData.setFloat("controlDpsDataToReturn", 0);
+        controlDpsDataToReturn.setJSONObject(i, dpsData);
+      }
+    }
+    for (int i = 0; i < testDpsDataToReturn.size(); i++) {
+      try {
+        JSONObject dpsData = new JSONObject();
+        dpsData.setFloat("testDpsDataToReturn", testDpsAverages.get(i));
+        testDpsDataToReturn.setJSONObject(i, dpsData);
+      } 
+      catch(ArrayIndexOutOfBoundsException e) {
+        JSONObject dpsData = new JSONObject();
+        dpsData.setFloat("testDpsDataToReturn", 0);
+        testDpsDataToReturn.setJSONObject(i, dpsData);
+      }
+    }
+    objectToReturn.setJSONArray("damagesDelt", damageDataToReturn);
+    objectToReturn.setJSONArray("frameDamageDelt", frameDataToReturn);
+    objectToReturn.setJSONArray("controlDpsData", controlDpsDataToReturn);
+    objectToReturn.setJSONArray("testDpsData", testDpsDataToReturn);
+    //println(objectToReturn);
+    return objectToReturn;
   }
 
   void newDataPoint(float d, float fd) {

@@ -53,6 +53,8 @@
     },
     "testDpsResult": 0,
     "controlDataVarience": 0,
-    "controlDpsResult": 0
+    "controlDpsResult": 0,
+    "testDpsData": [{}],
+    "controlDpsData": [{}]
   }]
 }

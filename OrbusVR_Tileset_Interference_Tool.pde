@@ -118,6 +118,7 @@ void draw() {
         while (timer <= timerConstant*frameRate) {
           parseCombatLog(); // Need to log frame hit data and the damage delt
           timer++;
+          //println(timer);
         }
         if (timer > timerConstant*frameRate) {
           //Log player dps avg pair

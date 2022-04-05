@@ -94,10 +94,12 @@ void parseCombatLog() {
       if (pieces[pieces.length-1].equals("(Critical)") && pieces[pieces.length-2].equals(nameChosen)) {
         println("length - 1 check");
         float damageWithoutCrit = float(pieces[pieces.length-5])/critDamagePlus;
-        testDataController.newDataPoint(damageWithoutCrit, 1);
+        testDataController.newDataPoint(damageWithoutCrit, timer);
+        //println(damageWithoutCrit);
       } else if (pieces[pieces.length-1].equals(nameChosen) && pieces[1].equals("[Combat]") && ((pieces[pieces.length-2].equals("from") && pieces[pieces.length-3].equals("damage")) || pieces[pieces.length-2].equals("damage"))) {
         println("fallback");
         testDataController.newDataPoint(float(pieces[pieces.length-4]), timer);
+        // println(float(pieces[pieces.length-4]));
       }
     }
   }
@@ -130,10 +132,12 @@ void parseCombatLogInit() {
         println("length - 1 check");
         float damageWithoutCrit = float(pieces[pieces.length-5])/critDamagePlus;
         testDataController.newDataPoint(damageWithoutCrit, 1);
+        //println(damageWithoutCrit);
         combatStarted = true;
       } else if (pieces[pieces.length-1].equals(nameChosen) && pieces[1].equals("[Combat]") && ((pieces[pieces.length-2].equals("from") && pieces[pieces.length-3].equals("damage")) || pieces[pieces.length-2].equals("damage"))) {
         println("fallback");
         testDataController.newDataPoint(float(pieces[pieces.length-4]), 1);
+        //println(float(pieces[pieces.length-4]));
         combatStarted = true;
       }
     }
@@ -188,21 +192,59 @@ void addGuiButtonsFromFileContent() {
   }
 }
 JSONObject newData() {
+  JSONObject damageData = testDataController.returnFloatLists();
   JSONObject controlData = new JSONObject();
   controlData.setString("playerName", nameChosen);
   controlData.setFloat("controlDpsResult", avgDps);
   controlData.setFloat("testDpsResult", avgDps);
+  controlData.setJSONArray("testDpsData", damageData.getJSONArray("testDpsData"));
+  controlData.setJSONArray("controlDpsData", damageData.getJSONArray("controlDpsData"));
+
+  /*
+  Using wrong keys? NEEDS TO BE TESTED
+   JSONArray damageDataToReturn = new JSONArray();
+   JSONArray frameDataToReturn = new JSONArray();
+   JSONArray controlDpsDataToReturn = new JSONArray();
+   JSONArray testDpsDataToReturn = new JSONArray();
+   
+   */
+
   //Need to calculate data varience here
   float varience = 0;
+  FloatList differencesFromMean = new FloatList();
+  controlData.setJSONArray("damagesDelt", damageData.getJSONArray("damageDataToReturn"));
+  //println(controlData.getJSONArray("damagesDelt"));
+  controlData.setJSONArray("frameDamageDelt", damageData.getJSONArray("frameDataToReturn"));
+  //println(damageData);
+  println(damagesDelt.size());
   for (int i = 0; i < damagesDelt.size(); i++) {
-    varience += sq(damagesDelt.getFloat(i)-avgDps);
+    // println(damagesDelt.getFloat(i));
+    // println(controlData.getJSONArray("damagesDelt").getFloat(i),controlData.getJSONArray("damagesDelt").getFloat(i)-avgDps);
+    differencesFromMean.add(i, controlData.getJSONArray("damagesDelt").getJSONObject(i).getFloat("damageDataToReturn")-avgDps); // get(i) is incorrect
   }
+  println(differencesFromMean);
+  float[] squaredDifferences = new float[differencesFromMean.size()];
+  for (int i = 0; i < squaredDifferences.length; i++) {
+    squaredDifferences[i] = differencesFromMean.get(i);
+    println();
+    println(differencesFromMean.get(i));
+    println(squaredDifferences[i]);
+    println();
+  }
+  for (int i = 0; i < squaredDifferences.length; i++) {
+    squaredDifferences[i] = sq(differencesFromMean.get(i));
+  }
+  for (int i = 0; i < squaredDifferences.length; i++) {
+    varience += squaredDifferences[i];
+  }
+  varience = varience/squaredDifferences.length;
+  println();
+  println(differencesFromMean, squaredDifferences.length, squaredDifferences);
+  println(squaredDifferences);
   varience = varience/damagesDelt.size();
-  controlData.setFloat("controlDataVarience", varience);
+  println(varience);
+  controlData.setFloat("controlDataVarience", varience); // ARRAY IN ARRAY LIKE [[]] NEEDS TO BE OJBECT IN ARRAY [{}]
   controlData.setFloat("testDataVarience", varience);
-  controlData.setJSONArray("damagesDelt", damagesDelt);
-  controlData.setJSONArray("frameDamageDelt", frameDamageDelt);
   controlData.setJSONObject("tilesets", new JSONObject()); //TO BE IMPLEMENTED LATER
-  controlData.setJSONArray("frameDamageDelt", new JSONArray()); //TO BE IMPLEMENTED LATER
   return controlData;
 }
