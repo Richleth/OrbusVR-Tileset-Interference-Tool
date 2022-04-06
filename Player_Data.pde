@@ -203,8 +203,7 @@ class TestData {
       println(avgDpf, avgDps);
       // println();
     } else if (frameDamageDelt.size() == 1 && damagesDelt.size() == 1) {
-      float avgDpf = damagesDelt.get(damagesDelt.size()-1) / frameDamageDelt.get(frameDamageDelt.size()-1);
-      avgDps = avgDpf * frameRate;
+      avgDps = damagesDelt.get(damagesDelt.size()-1);
       testDpsAverages.append(avgDps);
       controlDpsAverages.append(avgDps);
     }
