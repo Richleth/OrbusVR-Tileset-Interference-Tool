@@ -36,7 +36,7 @@ void drawDropdownMenu() {
           println("length - 1 check");
           addNames(pieces, 2);
         } else if (pieces[1].equals("[Combat]") && ((pieces[pieces.length-2].equals("from") && pieces[pieces.length-3].equals("damage")) || pieces[pieces.length-2].equals("damage"))) {
-          println("fallback");
+          //println("fallback");
           addNames(pieces, 1);
         }
       }
@@ -90,14 +90,14 @@ void parseCombatLog() {
     sameName = false;
     String[] pieces = split(line, " "); 
     if (pieces.length >= 7) {
-      println("Length Check Success");
+      // println("Length Check Success");
       if (pieces[pieces.length-1].equals("(Critical)") && pieces[pieces.length-2].equals(nameChosen)) {
-        println("length - 1 check");
+        // println("length - 1 check");
         float damageWithoutCrit = float(pieces[pieces.length-5])/critDamagePlus;
         testDataController.newDataPoint(damageWithoutCrit, timer);
         //println(damageWithoutCrit);
       } else if (pieces[pieces.length-1].equals(nameChosen) && pieces[1].equals("[Combat]") && ((pieces[pieces.length-2].equals("from") && pieces[pieces.length-3].equals("damage")) || pieces[pieces.length-2].equals("damage"))) {
-        println("fallback");
+        //println("fallback");
         testDataController.newDataPoint(float(pieces[pieces.length-4]), timer);
         // println(float(pieces[pieces.length-4]));
       }
@@ -127,15 +127,15 @@ void parseCombatLogInit() {
     sameName = false;
     String[] pieces = split(line, " "); 
     if (pieces.length >= 7) {
-      println("Length Check Success");
+      //println("Length Check Success");
       if (pieces[pieces.length-1].equals("(Critical)") && pieces[pieces.length-2].equals(nameChosen)) {
-        println("length - 1 check");
+        //println("length - 1 check");
         float damageWithoutCrit = float(pieces[pieces.length-5])/critDamagePlus;
         testDataController.newDataPoint(damageWithoutCrit, 1);
         //println(damageWithoutCrit);
         combatStarted = true;
       } else if (pieces[pieces.length-1].equals(nameChosen) && pieces[1].equals("[Combat]") && ((pieces[pieces.length-2].equals("from") && pieces[pieces.length-3].equals("damage")) || pieces[pieces.length-2].equals("damage"))) {
-        println("fallback");
+        //println("fallback");
         testDataController.newDataPoint(float(pieces[pieces.length-4]), 1);
         //println(float(pieces[pieces.length-4]));
         combatStarted = true;
@@ -193,7 +193,7 @@ void addGuiButtonsFromFileContent() {
 }
 JSONObject newData() {
   JSONObject damageData = testDataController.returnFloatLists();
-  JSONObject controlData = new JSONObject();
+  JSONObject controlData = damageData;
   controlData.setString("playerName", nameChosen);
   controlData.setFloat("controlDpsResult", avgDps);
   controlData.setFloat("testDpsResult", avgDps);
@@ -210,41 +210,22 @@ JSONObject newData() {
    */
 
   //Need to calculate data varience here
-  float varience = 0;
-  FloatList differencesFromMean = new FloatList();
-  controlData.setJSONArray("damagesDelt", damageData.getJSONArray("damageDataToReturn"));
+  controlData.setJSONArray("damagesDelt", damageData.getJSONArray("damagesDelt"));
   //println(controlData.getJSONArray("damagesDelt"));
-  controlData.setJSONArray("frameDamageDelt", damageData.getJSONArray("frameDataToReturn"));
-  //println(damageData);
-  println(damagesDelt.size());
-  for (int i = 0; i < damagesDelt.size(); i++) {
-    // println(damagesDelt.getFloat(i));
-    // println(controlData.getJSONArray("damagesDelt").getFloat(i),controlData.getJSONArray("damagesDelt").getFloat(i)-avgDps);
-    differencesFromMean.add(i, controlData.getJSONArray("damagesDelt").getJSONObject(i).getFloat("damageDataToReturn")-avgDps); // get(i) is incorrect
+  controlData.setJSONArray("frameDamageDelt", damageData.getJSONArray("frameDamageDelt"));
+  println(controlData, damageData);
+  println(controlData.getJSONArray("damagesDelt").size());
+
+  double varience = 0; // Potentially do varience on the AVG Dps values instead || SWAPPED TO AVG DPS VALUES, NEEDS TESTING
+  for (int i = 0; i < controlData.getJSONArray("testDpsData").size(); i++) { //testDpsData is always the same as control as what in the player data object gets updated is determined w/ a string
+    varience += Math.pow((controlData.getJSONArray("testDpsData").getFloat(i) - avgDps), 2);
+    println(varience);
   }
-  println(differencesFromMean);
-  float[] squaredDifferences = new float[differencesFromMean.size()];
-  for (int i = 0; i < squaredDifferences.length; i++) {
-    squaredDifferences[i] = differencesFromMean.get(i);
-    println();
-    println(differencesFromMean.get(i));
-    println(squaredDifferences[i]);
-    println();
-  }
-  for (int i = 0; i < squaredDifferences.length; i++) {
-    squaredDifferences[i] = sq(differencesFromMean.get(i));
-  }
-  for (int i = 0; i < squaredDifferences.length; i++) {
-    varience += squaredDifferences[i];
-  }
-  varience = varience/squaredDifferences.length;
+  varience /= controlData.getJSONArray("testDpsData").size();
   println();
-  println(differencesFromMean, squaredDifferences.length, squaredDifferences);
-  println(squaredDifferences);
-  varience = varience/damagesDelt.size();
   println(varience);
-  controlData.setFloat("controlDataVarience", varience); // ARRAY IN ARRAY LIKE [[]] NEEDS TO BE OJBECT IN ARRAY [{}]
-  controlData.setFloat("testDataVarience", varience);
+  controlData.setDouble("controlDataVarience", varience); // ARRAY IN ARRAY LIKE [[]] NEEDS TO BE OJBECT IN ARRAY [{}]
+  controlData.setDouble("testDataVarience", varience);
   controlData.setJSONObject("tilesets", new JSONObject()); //TO BE IMPLEMENTED LATER
   return controlData;
 }

@@ -44,6 +44,7 @@ float avgPercentDamageIncrease = 0;
 final float timerConstant = 60;
 float timer = 1;
 //BOOLEANS\\
+boolean parsing = false;
 boolean nameGiven = false;
 boolean controlParse = false;
 boolean testParse = false;

@@ -87,6 +87,7 @@ class GuiElementClickBehavior0 implements GuiElementClickBehavior {
     }
     //Record Control
     combatStarted = false;
+    parsing = true;
     controlParse = true;
     testParse = false;
     timer = 1;
@@ -101,6 +102,7 @@ class GuiElementClickBehavior1 implements GuiElementClickBehavior {
     }
     //Record Test
     combatStarted = false;
+    parsing = true;
     controlParse = false;
     testParse = true;
     timer = 1;

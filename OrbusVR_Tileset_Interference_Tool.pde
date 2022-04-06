@@ -1,4 +1,4 @@
-/** //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
+/** //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
  ----------IMPORTANT----------
  Users must use a non bleed weapon as bleed is inherintly luck based and will throw off results!
  Crit however is okay as the code normalizes damage to entirely non crits. This is possible as crits are reported by the combat log and all possible crit damage multipliers are known.
@@ -95,6 +95,7 @@ void setup() {
 
 void draw() {
   background(backgroundColor);
+  //println(frameRate, frameCount);
   //println(mouseX,mouseY);
 
   drawDropdownMenu();
@@ -112,43 +113,50 @@ void draw() {
     // COMPLETE? NEEDS TESTING // This option will then save to a file along with any +% Crit damage
     // COMPLETE? NEEDS TESTING // Testing interference you will test 1 time and the avg of this test will be compared to the control
     // COMPLETE? NEEDS TESTING // This option will only be available once a control is input either by way of a loaded file on startup or after completing a recording of control
-
-    if (controlParse) {
-      if (combatStarted) {
-        while (timer <= timerConstant*frameRate) {
-          parseCombatLog(); // Need to log frame hit data and the damage delt
-          timer++;
-          //println(timer);
+    if (parsing) {
+      if (controlParse) {
+        if (combatStarted) {
+          if (timer <= timerConstant*frameRate) {
+            parseCombatLog(); // Need to log frame hit data and the damage delt
+            timer++;
+            //println(timer);
+          } else
+            if (timer > timerConstant*frameRate) { // POTENTIALLY NEEDS BOOLEAN TO MAKE SURE THIS CODE ONLY RUNS ONCE
+              //Log player dps avg pair
+              try {
+                playerController.updatePlayerDataElement(newData(), nameChosen, new String[] {"controlDpsResult", "controlDataVarience", "damagesDelt", "frameDamageDelt","controlDpsData"});
+              } 
+              catch (NullPointerException e) {
+                playerController.createPlayerDataElement(newData(), nameChosen);
+              }
+              combatStarted = false;
+              parsing = false;
+              controlParse = false;
+            }
+        } else {
+          parseCombatLogInit();
         }
-        if (timer > timerConstant*frameRate) {
-          //Log player dps avg pair
-          try {
-            playerController.updatePlayerDataElement(newData(), nameChosen, new String[] {"controlDpsResult", "controlDataVarience", "damagesDelt", "frameDamageDelt"});
-          } 
-          catch (NullPointerException e) {
-            playerController.createPlayerDataElement(newData(), nameChosen);        
-          }
+      } else if (testParse && playerController.playerDataElementMatchesSelectName(nameChosen)) {
+        if (combatStarted) {
+          if (timer <= timerConstant*frameRate) {
+            parseCombatLog();
+            timer++;
+          } else
+            if (timer > timerConstant*frameRate) {
+              //Log player dps avg pair
+              try {
+                playerController.updatePlayerDataElement(newData(), nameChosen, new String[] {"testDpsResult", "testDataVarience", "damagesDelt", "frameDamageDelt","testDpsData"});
+              } 
+              catch (NullPointerException e) {
+                playerController.createPlayerDataElement(newData(), nameChosen);
+              }
+              combatStarted = false;
+              parsing = false;
+              testParse = false;
+            }
+        } else {
+          parseCombatLogInit();
         }
-      } else {
-        parseCombatLogInit();
-      }
-    } else if (testParse && playerController.playerDataElementMatchesSelectName(nameChosen)) {
-      if (combatStarted) {
-        while (timer <= timerConstant*frameRate) {
-          parseCombatLog();
-          timer++;
-        }
-        if (timer > timerConstant*frameRate) {
-          //Log player dps avg pair
-          try {
-            playerController.updatePlayerDataElement(newData(), nameChosen, new String[] {"testDpsResult", "testDataVarience", "damagesDelt", "frameDamageDelt"});
-          } 
-          catch (NullPointerException e) {
-            playerController.createPlayerDataElement(newData(), nameChosen);        
-          }
-        }
-      } else {
-        parseCombatLogInit();
       }
     }
   }
@@ -165,9 +173,9 @@ void mousePressed() {
 }
 void keyPressed() {
   if (key == 'p' || key == 'P') {
-    //Litterally a command to pause debugger //<>//
-    //Click on the if statement line number in debugger mode //<>//
-    println("Pause Debugger"); //<>//
+    //Litterally a command to pause debugger
+    //Click on the if statement line number in debugger mode
+    println("Pause Debugger");
   } else if (key == 'g' || key == 'G') { //Graph Mode
     playerDropdown.hide();
     critDamageDropdown.hide();
@@ -176,6 +184,8 @@ void keyPressed() {
     playerDropdown.show();
     critDamageDropdown.show();
     guiController.setVisible();
+  } else if (key == ']' || key == ']') { //Main Mode
+    timer = 999999999;
   }
 }
 void exit() {
