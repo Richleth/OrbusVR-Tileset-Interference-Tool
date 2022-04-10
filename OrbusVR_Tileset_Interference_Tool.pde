@@ -32,6 +32,8 @@
 
 void setup() {
   playerController.readPlayerDataElementsFromFile();
+  startParseSfx = new SoundFile(this, "startEffect.mp3");
+  endParseSfx = new SoundFile(this, "endingEffect.mp3");
   critDamagePlusGivenMultipliers.put("0% Plus Crit Damage", 1.53);
   critDamagePlusGivenMultipliers.put("2% Plus Crit Damage", 1.55);
   critDamagePlusGivenMultipliers.put("4% Plus Crit Damage", 1.57);
@@ -106,13 +108,8 @@ void draw() {
   // Player must self report how much + % Crit Damage they have on their gear
 
   if (nameGiven && critDamagePlusGiven) {
+    // ERROR // Both will detect first hit on the player dummy then parse for 1 minute to either record a control or test against control //ERROR: Any addition to combat log will prevent parsing
 
-    // COMPLETE? NEEDS TESTING // Detect Option Chosen (Record Baseline Parse [Control] or Test Interference)
-    // COMPLETE? NEEDS TESTING // Both will detect first hit on the player dummy then parse for 1 minute to either record a control or test against control
-    // COMPLETE? NEEDS TESTING // Recording a control you will test 1 time and the control will be set as the average control damage
-    // COMPLETE? NEEDS TESTING // This option will then save to a file along with any +% Crit damage
-    // COMPLETE? NEEDS TESTING // Testing interference you will test 1 time and the avg of this test will be compared to the control
-    // COMPLETE? NEEDS TESTING // This option will only be available once a control is input either by way of a loaded file on startup or after completing a recording of control
     if (parsing) {
       if (controlParse) {
         if (combatStarted) {
@@ -132,6 +129,7 @@ void draw() {
               combatStarted = false;
               parsing = false;
               controlParse = false;
+              endParseSfx.play();
             }
         } else {
           parseCombatLogInit();
@@ -153,6 +151,7 @@ void draw() {
               combatStarted = false;
               parsing = false;
               testParse = false;
+              endParseSfx.play();
             }
         } else {
           parseCombatLogInit();
@@ -172,7 +171,7 @@ void mousePressed() {
   guiController.buttonCheckMouseHovering();
 }
 void keyPressed() {
-  if (key == 'p' || key == 'P') {
+  if (key == 'p' || key == 'P') { //<>//
     //Litterally a command to pause debugger
     //Click on the if statement line number in debugger mode
     println("Pause Debugger");

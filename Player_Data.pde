@@ -11,7 +11,7 @@ class PlayerDataMain { //<>// //<>//
 
   boolean playerDataElementMatchesSelectName(String s) {
     try {
-      if (playerDataElements.get(s).equals(nameChosen)) {
+      if (playerDataElements.get(s).returnPlayerName().equals(nameChosen)) {
         return true;
       } else {
         return false;
@@ -24,9 +24,6 @@ class PlayerDataMain { //<>// //<>//
   }
 
   void updatePlayerDataElement(JSONObject data, String tPlayerName, String[] dataToUpdate) {
-    playerDataElements.get(tPlayerName).updateData(dataToUpdate, data); // NEED TO ADD THE REST OF RESULTS
-  }
-  void updatePlayerDataElementTest(JSONObject data, String tPlayerName, String[] dataToUpdate) {
     playerDataElements.get(tPlayerName).updateData(dataToUpdate, data); // NEED TO ADD THE REST OF RESULTS
   }
 
@@ -165,7 +162,7 @@ class PlayerDataElement {
     playerDataObject.setJSONArray("weaponAffixes", weaponAffixes);
     playerDataObject.setJSONArray("controlDpsData", controlDpsData);
     playerDataObject.setJSONArray("testDpsData", testDpsData);
-    println(playerDataObject);
+    //println(playerDataObject);
     return playerDataObject;
   }
 
@@ -204,7 +201,7 @@ class TestData {
       // println();
     } else if (frameDamageDelt.size() == 1 && damagesDelt.size() == 1) {
       avgDps = damagesDelt.get(damagesDelt.size()-1);
-      testDpsAverages.append(avgDps);
+      testDpsAverages.append(avgDps);   
       controlDpsAverages.append(avgDps);
     }
   }
@@ -267,6 +264,8 @@ class TestData {
 
   void clearData() {
     damagesDelt.clear();
+    testDpsAverages.clear();
+    controlDpsAverages.clear();
     frameDamageDelt.clear();
   }
 }

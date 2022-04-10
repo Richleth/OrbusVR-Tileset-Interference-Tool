@@ -18,6 +18,7 @@ class GuiElement {
   private GuiElementDisplayBehavior displayBehavior; //Controller for the display behavior
   private int wLength;
   private float tSize;
+  private float c2 = 0.7;
 
   private void shapeSetup() {
     push();
@@ -161,7 +162,8 @@ class GuiElement {
       shape(shape);
       displayBehavior.doDisplayAction(id, displayCode);
       if (textVisibility) {
-
+        wLength = text.length();
+        tSize = c2*sqrt((w * h)/wLength);
         fill(textColor);
         textSize(tSize);
         textAlign(CENTER);

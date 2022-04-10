@@ -7,8 +7,8 @@
  Where T = Test Mean, C = Control Mean, Ts = Test Standard Deviation, Cs = Control Standard Deviation
  (((T+Ts)-(C-Cs))/(C-Cs))*100 = Maximum Percent Increase Comparing Control and Test
  (((T-Ts)-(C+Cs))/(C+Cs))*100 = Minimum Percent Increase Comparing Control and Test
- (T-Ts)-(C+Cs) = Maximum Increase Comparing Control and Test
- (T+Ts)-(C-Cs) = Minimum Increase Comparing Control and Test
+ (T+Ts)-(C-Cs) = Maximum Increase Comparing Control and Test
+ (T-Ts)-(C+Cs) = Minimum Increase Comparing Control and Test
  https://www.mathsisfun.com/data/standard-deviation.html
  https://www.calculatorsoup.com/calculators/algebra/percentage-increase-calculator.php
  https://www.statisticshowto.com/combined-mean/

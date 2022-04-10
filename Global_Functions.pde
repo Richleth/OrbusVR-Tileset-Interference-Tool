@@ -68,6 +68,10 @@ void addNames(String[] pieces, int arrayIndex) {
   }
 } 
 void parseCombatLog() {
+  if (!startAudioEffectPlayed) {
+    startParseSfx.play();
+    startAudioEffectPlayed = true;
+  }
   try {
     if (readyToParse == false) {
       println("---Not Ready To Parse---");
@@ -104,7 +108,7 @@ void parseCombatLog() {
     }
   }
 }
-void parseCombatLogInit() {
+void parseCombatLogInit() { 
   try {
     if (readyToParse == false) {
       println("---Not Ready To Parse---");
@@ -213,19 +217,40 @@ JSONObject newData() {
   controlData.setJSONArray("damagesDelt", damageData.getJSONArray("damagesDelt"));
   //println(controlData.getJSONArray("damagesDelt"));
   controlData.setJSONArray("frameDamageDelt", damageData.getJSONArray("frameDamageDelt"));
-  println(controlData, damageData);
-  println(controlData.getJSONArray("damagesDelt").size());
 
-  double varience = 0; // Potentially do varience on the AVG Dps values instead || SWAPPED TO AVG DPS VALUES, NEEDS TESTING
-  for (int i = 0; i < controlData.getJSONArray("testDpsData").size(); i++) { //testDpsData is always the same as control as what in the player data object gets updated is determined w/ a string
-    varience += Math.pow((controlData.getJSONArray("testDpsData").getFloat(i) - avgDps), 2);
-    println(varience);
+  double testVarience = 0; // Potentially do varience on the AVG Dps values instead || SWAPPED TO AVG DPS VALUES, NEEDS TESTING
+  double controlVarience = 0;
+  //Control Varience
+  if (controlParse) {
+    for (int i = 0; i < controlData.getJSONArray("controlDpsData").size(); i++) { 
+      controlVarience += ((controlData.getJSONArray("controlDpsData").getFloat(i) - avgDps)*(controlData.getJSONArray("controlDpsData").getFloat(i) - avgDps));
+    }
+    controlVarience /= controlData.getJSONArray("controlDpsData").size();
   }
-  varience /= controlData.getJSONArray("testDpsData").size();
+  //Test Varience
+  if (testParse) {
+    for (int i = 0; i < controlData.getJSONArray("testDpsData").size(); i++) { 
+      testVarience += ((controlData.getJSONArray("testDpsData").getFloat(i) - avgDps)*(controlData.getJSONArray("testDpsData").getFloat(i) - avgDps));
+    }
+    testVarience /= controlData.getJSONArray("testDpsData").size();
+  }
+  try {
+    cStandardDeviation = sqrt((float)controlVarience);
+    controlData.setDouble("controlDataVarience", controlVarience); // ARRAY IN ARRAY LIKE [[]] NEEDS TO BE OJBECT IN ARRAY [{}]
+  } 
+  catch (RuntimeException e) {
+  }
+  try {
+    tStandardDeviation = sqrt((float)testVarience);
+    controlData.setDouble("testDataVarience", testVarience);
+  } 
+  catch (RuntimeException e) {
+  }
   println();
-  println(varience);
-  controlData.setDouble("controlDataVarience", varience); // ARRAY IN ARRAY LIKE [[]] NEEDS TO BE OJBECT IN ARRAY [{}]
-  controlData.setDouble("testDataVarience", varience);
+  println("control "+controlVarience);
+  println("test "+testVarience);
+  
+  
   controlData.setJSONObject("tilesets", new JSONObject()); //TO BE IMPLEMENTED LATER
   return controlData;
 }

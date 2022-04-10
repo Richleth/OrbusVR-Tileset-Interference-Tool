@@ -31,9 +31,7 @@ String[] lines2;
 String[] critDamagePlusGivenLabels = {"0% Plus Crit Damage", "2% Plus Crit Damage", "4% Plus Crit Damage", "6% Plus Crit Damage", "8% Plus Crit Damage"};
 //INTS\\
 int id = 0;
-int cStandardDeviation = 0;
-int tStandardDeviation = 0;
-int backgroundColor = 255;
+final int backgroundColor = 255;
 //HASHMAPS\\
 HashMap<String, Float> critDamagePlusGivenMultipliers = new HashMap<String, Float>();
 //FLOATS\\
@@ -43,8 +41,11 @@ float avgDpsDifference = 0;
 float avgPercentDamageIncrease = 0;
 final float timerConstant = 60;
 float timer = 1;
+float cStandardDeviation = 0;
+float tStandardDeviation = 0;
 //BOOLEANS\\
 boolean parsing = false;
+boolean startAudioEffectPlayed = false;
 boolean nameGiven = false;
 boolean controlParse = false;
 boolean testParse = false;
@@ -59,3 +60,6 @@ GuiMain guiController = new GuiMain();
 PlayerDataMain playerController = new PlayerDataMain();
 //TEST DATA\\
 TestData testDataController = new TestData();
+//AUDIO FILES\\
+SoundFile startParseSfx;
+SoundFile endParseSfx;

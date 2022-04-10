@@ -83,30 +83,47 @@ class GuiElementNoClickBehavior implements GuiElementClickBehavior {
 class GuiElementClickBehavior0 implements GuiElementClickBehavior {
   void doClickAction(int id) {
     //Action Code
-    if (nameGiven && critDamagePlusGiven) {
-    }
     //Record Control
     combatStarted = false;
     parsing = true;
     controlParse = true;
     testParse = false;
+    startAudioEffectPlayed = false;
     timer = 1;
     testDataController.clearData();
+    String str = "";
+    try {
+    while ((str=reader.readLine())!=null)
+      println(str);
+    } catch (IOException e) {
+      e.printStackTrace();
+        line = null;
+        println("CATCH IO");
+    }
+    println(line);
     println("GuiElement "+id+" performed GuiElementClickBehavior0");
   }
 }
 class GuiElementClickBehavior1 implements GuiElementClickBehavior {
   void doClickAction(int id) {
     //Action Code
-    if (nameGiven && critDamagePlusGiven) {
-    }
     //Record Test
     combatStarted = false;
     parsing = true;
     controlParse = false;
     testParse = true;
+    startAudioEffectPlayed = false;
     timer = 1;
     testDataController.clearData();
+    String str = "";
+    try {
+    while ((str=reader.readLine())!=null)
+      println(str);
+    } catch (IOException e) {
+      e.printStackTrace();
+        line = null;
+        println("CATCH IO");
+    }
     println("GuiElement "+id+" performed GuiElementClickBehavior1");
   }
 }
@@ -157,6 +174,60 @@ class GuiElementNoDisplayBehavior implements GuiElementDisplayBehavior {
   }
 }
 class GuiElementTextChangeBehavior implements GuiElementDisplayBehavior {
+  private void deviationCheckerFunctionDps() {
+    if (cStandardDeviation == 0 && tStandardDeviation == 0) {
+        textToReturn = "Requires Control and Test Data";
+      } else if (tStandardDeviation == 0) {
+        textToReturn = "Requires Test Data";
+      } else if (cStandardDeviation == 0) {
+        textToReturn = "Requires Control Data";
+      } else {
+        /*
+        Where T = Test Mean, C = Control Mean, Ts = Test Standard Deviation, Cs = Control Standard Deviation
+         (((T+Ts)-(C-Cs))/(C-Cs))*100 = Maximum Percent Increase Comparing Control and Test
+         (((T-Ts)-(C+Cs))/(C+Cs))*100 = Minimum Percent Increase Comparing Control and Test
+         (T+Ts)-(C-Cs) = Maximum Increase Comparing Control and Test
+         (T-Ts)-(C+Cs) = Minimum Increase Comparing Control and Test
+         */
+        JSONObject playerData = playerController.getPlayerDataElement(nameChosen).returnAllObjectData();
+        float C = playerData.getFloat("controlDpsResult");
+        float T = playerData.getFloat("testDpsResult");
+        float tCs = (float)playerData.getDouble("controlDataVarience"); //Converting a double to a float you put (float)doubleVariable  |  It's stupid
+        float tTs = (float)playerData.getDouble("testDataVarience");
+        float Cs = sqrt(tCs);
+        float Ts = sqrt(tTs);
+        double deviationMaximum = (T+Ts)-(C-Cs); 
+        double deviationMinimum = (T-Ts)-(C+Cs);
+        textToReturn = "The Range of Deviation is between "+ deviationMinimum +" and "+deviationMaximum;
+      }
+  }
+  private void deviationCheckerFunctionPercent() {
+    if (cStandardDeviation == 0 && tStandardDeviation == 0) {
+        textToReturn = "Requires Control and Test Data";
+      } else if (tStandardDeviation == 0) {
+        textToReturn = "Requires Test Data";
+      } else if (cStandardDeviation == 0) {
+        textToReturn = "Requires Control Data";
+      } else {
+        /*
+        Where T = Test Mean, C = Control Mean, Ts = Test Standard Deviation, Cs = Control Standard Deviation
+         (((T+Ts)-(C-Cs))/(C-Cs))*100 = Maximum Percent Increase Comparing Control and Test
+         (((T-Ts)-(C+Cs))/(C+Cs))*100 = Minimum Percent Increase Comparing Control and Test
+         (T+Ts)-(C-Cs) = Maximum Increase Comparing Control and Test
+         (T-Ts)-(C+Cs) = Minimum Increase Comparing Control and Test
+         */
+        JSONObject playerData = playerController.getPlayerDataElement(nameChosen).returnAllObjectData();
+        float C = playerData.getFloat("controlDpsResult");
+        float T = playerData.getFloat("testDpsResult");
+        float tCs = (float)playerData.getDouble("controlDataVarience"); //Converting a double to a float you put (float)doubleVariable  |  It's stupid
+        float tTs = (float)playerData.getDouble("testDataVarience");
+        float Cs = sqrt(tCs);
+        float Ts = sqrt(tTs);
+        double deviationMaximum = (((T+Ts)-(C-Cs))/(C-Cs))*100; 
+        double deviationMinimum = (((T-Ts)-(C+Cs))/(C+Cs))*100;
+        textToReturn = "The Range of Deviation is between "+ deviationMinimum +"% and "+deviationMaximum+"%";
+      }
+  }
   String textToReturn = null;
   void doDisplayAction(int id, int displayCode) {
     switch(displayCode) {
@@ -176,13 +247,13 @@ class GuiElementTextChangeBehavior implements GuiElementDisplayBehavior {
       textToReturn = "Test Standard Deviation: +- "+tStandardDeviation;
       break;
     case 5:
-      textToReturn = "Deviation Range Case 0";
+      deviationCheckerFunctionDps();
       break;
     case 6:
-      textToReturn = "Deviation Range Case 1";
+      deviationCheckerFunctionDps();
       break;
     case 7:
-      textToReturn = "Deviation Range Case 2";
+      deviationCheckerFunctionPercent();
       break;
     default:
       //textToReturn = "default"; //Temporary code
