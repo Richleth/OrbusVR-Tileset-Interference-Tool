@@ -1,4 +1,4 @@
-class PlayerDataMain { //<>// //<>//
+class PlayerDataMain { //<>// //<>// //<>// //<>//
   private HashMap<String, PlayerDataElement> playerDataElements = new HashMap<String, PlayerDataElement>();
   private ArrayList<String> playerDataElementKeys = new ArrayList<String>();
   private JSONObject mainData = new JSONObject();
@@ -27,8 +27,8 @@ class PlayerDataMain { //<>// //<>//
     playerDataElements.get(tPlayerName).updateData(dataToUpdate, data); // NEED TO ADD THE REST OF RESULTS
   }
 
-  void createPlayerDataElement(JSONObject data, String tPlayerName) {
-    playerDataElements.put(tPlayerName, new PlayerDataElement(data, tPlayerName)); //UPDATED CONSTRUCTOR NEEDS CHANGING TEST RESULT = 0 DUE TO ONLY BEING CREATED IN A CONTROL PARSE
+  void createPlayerDataElement(JSONObject data, String tPlayerName, String method) {
+    playerDataElements.put(tPlayerName, new PlayerDataElement(data, tPlayerName, method)); //UPDATED CONSTRUCTOR NEEDS CHANGING TEST RESULT = 0 DUE TO ONLY BEING CREATED IN A CONTROL PARSE
     playerDataElementKeys.add(tPlayerName);
   }
 
@@ -38,9 +38,7 @@ class PlayerDataMain { //<>// //<>//
     JSONArray nameValues = new JSONArray();
     JSONArray playerDataValues = new JSONArray();
     for (int i = 0; i < playerDataElementKeys.size(); i++) {
-      JSONObject dataObject = new JSONObject();
-      dataObject.setString("name", playerDataElementKeys.get(i));
-      nameValues.setJSONObject(i, dataObject);
+      nameValues.setString(i, playerDataElementKeys.get(i));
       JSONObject playerDataObject = playerDataElements.get(playerDataElementKeys.get(i)).returnAllObjectData(); //SOMETHING WRONG HERE
       playerDataValues.setJSONObject(i, playerDataObject);
       // NEED TO MAKE SURE THE DATA IS UP TO DATE IN OBJECT
@@ -51,23 +49,19 @@ class PlayerDataMain { //<>// //<>//
     }
 
     println(writePlayerData);
-    // JSON Must write keys for player names to another object in the same JSON file
-    saveJSONObject(writePlayerData, "data/playerDataElementsTest.json");
-    PrintWriter output = createWriter("data/playerDataElements.txt");
-    for (int i = 0; i < playerDataElementKeys.size(); i++) {
-      output.println(playerDataElementKeys.get(i)+"|"+playerDataElements.get(playerDataElementKeys.get(i)).returnControlTestResult());
-      println(playerDataElementKeys.get(i)+"|"+playerDataElements.get(playerDataElementKeys.get(i)).returnControlTestResult());
-    }
-    output.flush();
-    output.close();
+    // Changed from testing file to real file read at startup
+    saveJSONObject(writePlayerData, "data/playerDataElements.json");
   }
 
   void readPlayerDataElementsFromFile() {
     // Use JSON Object instead
     JSONObject savedPlayerData = loadJSONObject("data/playerDataElements.json");
+    for (int i = 0; i < savedPlayerData.getJSONArray("names").size(); i++) {
+      names.add(savedPlayerData.getJSONArray("names").getString(i));
+    }
     //MUST SOMEHOW READ AND GET ALL ELEMENTS
     for (int i = 0; i < savedPlayerData.getJSONArray("names").size(); i++) {
-      String playerName = savedPlayerData.getJSONArray("names").getJSONObject(i).getString("name");
+      String playerName = savedPlayerData.getJSONArray("names").getString(i);
       /* Old Vars
        float controlDpsResult = savedPlayerData.getFloat("controlDpsResult");
        float testDpsResult = savedPlayerData.getFloat("testDpsResult");
@@ -78,7 +72,7 @@ class PlayerDataMain { //<>// //<>//
        JSONArray weaponAffixes = savedPlayerData.getJSONArray("weaponAffixes");
        */
       println(playerName);
-      createPlayerDataElement(savedPlayerData, playerName);
+      createPlayerDataElement(savedPlayerData, playerName, "READ");
     }
   }
 }
@@ -99,21 +93,43 @@ class PlayerDataElement {
   private JSONArray weaponAffixes; //uses _ notation EX: lightning_forged
 
 
-  PlayerDataElement(JSONObject tData, String tName) {
+  PlayerDataElement(JSONObject tData, String tName, String method) {
     data = tData;
-    playerName = data.getJSONArray(tName).getJSONObject(0).getString("playerName");
-    controlDpsResult = data.getJSONArray(tName).getJSONObject(0).getFloat("controlDpsResult");
-    controlDpsData = data.getJSONArray(tName).getJSONObject(0).getJSONArray("controlDpsData");
-    testDpsResult = data.getJSONArray(tName).getJSONObject(0).getFloat("testDpsResult");
-    testDpsData = data.getJSONArray(tName).getJSONObject(0).getJSONArray("testDpsData");
-    controlDataVarience = data.getJSONArray(tName).getJSONObject(0).getDouble("controlDataVarience");
-    testDataVarience = data.getJSONArray(tName).getJSONObject(0).getDouble("testDataVarience");
-    damagesDelt = data.getJSONArray(tName).getJSONObject(0).getJSONArray("damagesDelt");
-    frameDamageDelt = data.getJSONArray(tName).getJSONObject(0).getJSONArray("frameDamageDelt");
-    tilesets = data.getJSONArray(tName).getJSONObject(0).getJSONObject("tilesets");
-    weaponAffixes = data.getJSONArray(tName).getJSONObject(0).getJSONArray("weaponAffixes");
+    switch(method) {
+    case "READ":
+      playerName = data.getJSONArray(tName).getJSONObject(0).getString("playerName");
+      controlDpsResult = data.getJSONArray(tName).getJSONObject(0).getFloat("controlDpsResult");
+      controlDpsData = data.getJSONArray(tName).getJSONObject(0).getJSONArray("controlDpsData");
+      testDpsResult = data.getJSONArray(tName).getJSONObject(0).getFloat("testDpsResult");
+      testDpsData = data.getJSONArray(tName).getJSONObject(0).getJSONArray("testDpsData");
+      controlDataVarience = data.getJSONArray(tName).getJSONObject(0).getDouble("controlDataVarience");
+      testDataVarience = data.getJSONArray(tName).getJSONObject(0).getDouble("testDataVarience");
+      damagesDelt = data.getJSONArray(tName).getJSONObject(0).getJSONArray("damagesDelt");
+      frameDamageDelt = data.getJSONArray(tName).getJSONObject(0).getJSONArray("frameDamageDelt");
+      tilesets = data.getJSONArray(tName).getJSONObject(0).getJSONObject("tilesets");
+      weaponAffixes = data.getJSONArray(tName).getJSONObject(0).getJSONArray("weaponAffixes");
+      break;
+    case "NEW":
+      playerName = data.getString("playerName");
+      controlDpsResult = data.getFloat("controlDpsResult");
+      controlDpsData = data.getJSONArray("controlDpsData");
+      testDpsResult = data.getFloat("testDpsResult");
+      testDpsData = data.getJSONArray("testDpsData");
+      controlDataVarience = data.getDouble("controlDataVarience");
+      testDataVarience = data.getDouble("testDataVarience");
+      damagesDelt = data.getJSONArray("damagesDelt");
+      frameDamageDelt = data.getJSONArray("frameDamageDelt");
+      tilesets = data.getJSONObject("tilesets");
+      weaponAffixes = data.getJSONArray("weaponAffixes");
+      break;
+    }
+    println(data, tData);
   }
   void updateData(String[] keysToUpdate, JSONObject data) {
+    
+    
+    avgDpsDifference = testDpsResult - controlDpsResult;
+    avgPercentDamageIncrease = (avgDpsDifference/controlDpsResult)*100;
     for (int i = 0; i < keysToUpdate.length; i++) {
       switch (keysToUpdate[i]) {
       case "controlDpsResult":
@@ -130,9 +146,11 @@ class PlayerDataElement {
         break;
       case "controlDataVarience":
         controlDataVarience = data.getDouble("controlDataVarience");
+        cStandardDeviation = sqrt((float)controlDataVarience); // Sets cStandardDeviation when this field is updated
         break;
       case "testDataVarience":
         testDataVarience = data.getDouble("testDataVarience");
+        tStandardDeviation = sqrt((float)tStandardDeviation); // Sets tStandardDeviation when this field is updated
         break;
       case "damagesDelt":
         damagesDelt = data.getJSONArray("damagesDelt");

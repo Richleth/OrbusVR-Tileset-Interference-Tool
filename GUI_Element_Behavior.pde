@@ -196,6 +196,7 @@ class GuiElementTextChangeBehavior implements GuiElementDisplayBehavior {
         float tTs = (float)playerData.getDouble("testDataVarience");
         float Cs = sqrt(tCs);
         float Ts = sqrt(tTs);
+        
         double deviationMaximum = (T+Ts)-(C-Cs); 
         double deviationMinimum = (T-Ts)-(C+Cs);
         textToReturn = "The Range of Deviation is between "+ deviationMinimum +" and "+deviationMaximum;
@@ -235,10 +236,10 @@ class GuiElementTextChangeBehavior implements GuiElementDisplayBehavior {
       textToReturn = avgDps+" DPS";
       break;
     case 1:
-      textToReturn = avgDpsDifference+" DPS Difference"; //Temporary code
+      textToReturn = avgDpsDifference+" DPS Difference"; //NEEDS TO ACTUALLY DISPLAY DIFFERENCE BETWEEN CONTROL AND TEST
       break;
     case 2:
-      textToReturn = avgPercentDamageIncrease+" % Damage Increase"; //Temporary code
+      textToReturn = avgPercentDamageIncrease+" % Damage Increase"; //NEEDS TO ACTUALLY DISPLAY DIFFERENCE BETWEEN CONTROL AND TEST
       break;
     case 3:
       textToReturn = "Control Standard Deviation: +- "+cStandardDeviation;

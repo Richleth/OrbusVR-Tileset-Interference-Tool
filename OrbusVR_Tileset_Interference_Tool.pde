@@ -1,6 +1,8 @@
-/** //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
+/** //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
  ----------IMPORTANT----------
  Users must use a non bleed weapon as bleed is inherintly luck based and will throw off results!
+ Users must use a non lightning forged weapon as lightning forged is inherintly luck based and will throw off results!
+ Users must use a non lifesteal weapon as lifesteal is inherintly luck based and will throw off results due to extra tiles!
  Crit however is okay as the code normalizes damage to entirely non crits. This is possible as crits are reported by the combat log and all possible crit damage multipliers are known.
  
  Status effects like potions must be the same between both control and sample tests.
@@ -40,7 +42,8 @@ void setup() {
   critDamagePlusGivenMultipliers.put("6% Plus Crit Damage", 1.59);
   critDamagePlusGivenMultipliers.put("8% Plus Crit Damage", 1.61);
   PFont listFont = loadFont("fontForList.vlw");
-  names.add("Richleth");
+  //names.add("Richleth"); OLD TESTING COMMAND TO GET ARROUND NULL POINTER
+  names.add("TesterName");
   //Set Up Dropdown List\\
   playerDropdown = new ControlP5(this);
   playerDropdown.addScrollableList("Player_Chosen")
@@ -96,11 +99,36 @@ void setup() {
 }
 
 void draw() {
+  if (changedChosenName) {
+    // CODE THAT ATTEMPTS TO LOAD FROM JSON THE DATA FOR THE SELECTED PLAYER
+    PlayerDataElement dataElement = playerController.getPlayerDataElement(nameChosen);
+    if (dataElement != null) {
+      println("helloWorld");
+      println(dataElement.returnAllObjectData());
+      float testDpsResult = dataElement.returnAllObjectData().getFloat("testDpsResult");
+      float controlDpsResult = dataElement.returnAllObjectData().getFloat("controlDpsResult");
+      float testDataVarience = dataElement.returnAllObjectData().getFloat("testDataVarience");
+      float controlDataVarience = dataElement.returnAllObjectData().getFloat("controlDataVarience");
+
+      avgDpsDifference = testDpsResult - controlDpsResult;
+      avgPercentDamageIncrease = (avgDpsDifference/controlDpsResult)*100;
+      cStandardDeviation = sqrt(testDataVarience);
+      tStandardDeviation = sqrt(controlDataVarience);
+      changedChosenName = false;
+    } else {
+      avgDpsDifference = 0;
+      avgPercentDamageIncrease = 0;
+      cStandardDeviation = 0;
+      tStandardDeviation = 0;
+      changedChosenName = false;
+    }
+  }
   background(backgroundColor);
   //println(frameRate, frameCount);
   //println(mouseX,mouseY);
-
-  drawDropdownMenu();
+  if (playerDropdown.get(ScrollableList.class, "Player_Chosen").isOpen()) {
+    drawDropdownMenu();
+  }
   guiController.display();
   fill(0);
   textAlign(LEFT);
@@ -108,7 +136,7 @@ void draw() {
   // Player must self report how much + % Crit Damage they have on their gear
 
   if (nameGiven && critDamagePlusGiven) {
-    // ERROR // Both will detect first hit on the player dummy then parse for 1 minute to either record a control or test against control //ERROR: Any addition to combat log will prevent parsing
+    //ERROR: Any addition to combat log will prevent parsing
 
     if (parsing) {
       if (controlParse) {
@@ -121,10 +149,10 @@ void draw() {
             if (timer > timerConstant*frameRate) { // POTENTIALLY NEEDS BOOLEAN TO MAKE SURE THIS CODE ONLY RUNS ONCE
               //Log player dps avg pair
               try {
-                playerController.updatePlayerDataElement(newData(), nameChosen, new String[] {"controlDpsResult", "controlDataVarience", "damagesDelt", "frameDamageDelt","controlDpsData"});
+                playerController.updatePlayerDataElement(newData(), nameChosen, new String[] {"controlDpsResult", "controlDataVarience", "damagesDelt", "frameDamageDelt", "controlDpsData"});
               } 
               catch (NullPointerException e) {
-                playerController.createPlayerDataElement(newData(), nameChosen);
+                playerController.createPlayerDataElement(newData(), nameChosen, "NEW");
               }
               combatStarted = false;
               parsing = false;
@@ -143,10 +171,10 @@ void draw() {
             if (timer > timerConstant*frameRate) {
               //Log player dps avg pair
               try {
-                playerController.updatePlayerDataElement(newData(), nameChosen, new String[] {"testDpsResult", "testDataVarience", "damagesDelt", "frameDamageDelt","testDpsData"});
+                playerController.updatePlayerDataElement(newData(), nameChosen, new String[] {"testDpsResult", "testDataVarience", "damagesDelt", "frameDamageDelt", "testDpsData"});
               } 
               catch (NullPointerException e) {
-                playerController.createPlayerDataElement(newData(), nameChosen);
+                playerController.createPlayerDataElement(newData(), nameChosen, "NEW");
               }
               combatStarted = false;
               parsing = false;
@@ -161,8 +189,8 @@ void draw() {
   }
   push();
   fill(0);
-  textSize(20);
-  text("G: Graph Mode   |   M: Main Mode", 15, height-15);
+  textSize(15);
+  text("ESC: Save and Exit   |   G: Graph Mode   |   M: Main Mode", 15, height-15);
   pop();
 }
 void mousePressed() {
@@ -171,7 +199,7 @@ void mousePressed() {
   guiController.buttonCheckMouseHovering();
 }
 void keyPressed() {
-  if (key == 'p' || key == 'P') { //<>//
+  if (key == 'p' || key == 'P') {
     //Litterally a command to pause debugger
     //Click on the if statement line number in debugger mode
     println("Pause Debugger");
@@ -185,9 +213,8 @@ void keyPressed() {
     guiController.setVisible();
   } else if (key == ']' || key == ']') { //Main Mode
     timer = 999999999;
+  } else if (keyCode == ESC) {
+    playerController.writePlayerDataElementsToFile();
+    exit();
   }
-}
-void exit() {
-  println("Exit Program");
-  playerController.writePlayerDataElementsToFile();
 }

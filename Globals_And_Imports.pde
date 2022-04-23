@@ -44,6 +44,7 @@ float timer = 1;
 float cStandardDeviation = 0;
 float tStandardDeviation = 0;
 //BOOLEANS\\
+boolean changedChosenName = false;
 boolean parsing = false;
 boolean startAudioEffectPlayed = false;
 boolean nameGiven = false;

@@ -5,7 +5,9 @@ void Player_Chosen(int n) {
   String[] subPieces = split(pieces[16], "=");
   nameChosen = subPieces[1];
   nameGiven = true;
+  changedChosenName = true;
   println(nameChosen);
+ 
 }
 void Crit_Damage(int n) {
   /* request the selected item based on index n */

@@ -1,60 +1,238 @@
 {
-  "names": [{"name": "Richleth"}],
-  "Richleth": [{
-    "testDataVarience": 0,
-    "damagesDelt": [],
-    "playerName": "Richleth",
-    "weaponAffixes": [{
-      "affix2": "",
-      "affix1": ""
-    }],
-    "frameDamageDelt": [],
-    "tilesets": {
-      "head": [
-        {},
-        {},
-        {},
-        {},
-        {},
-        {}
-      ],
-      "weapon": [
-        {},
-        {},
-        {},
-        {},
-        {},
-        {}
-      ],
-      "chest": [
-        {},
-        {},
-        {},
-        {},
-        {},
-        {}
-      ],
-      "gloves": [
-        {},
-        {},
-        {},
-        {},
-        {},
-        {}
-      ],
-      "body": [
-        {},
-        {},
-        {},
-        {},
-        {},
-        {}
-      ]
+  "names": [
+    "Richleth",
+    "Brettman"
+  ],
+  "Richleth": [
+    {
+      "testDataVarience": 25,
+      "controlDpsData": [{}],
+      "damagesDelt": [],
+      "testDpsData": [{}],
+      "playerName": "Richleth",
+      "weaponAffixes": [{
+        "affix2": "",
+        "affix1": ""
+      }],
+      "frameDamageDelt": [],
+      "tilesets": {
+        "head": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ],
+        "weapon": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ],
+        "chest": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ],
+        "gloves": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ],
+        "body": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ]
+      },
+      "testDpsResult": 110,
+      "controlDataVarience": 25,
+      "controlDpsResult": 100
     },
-    "testDpsResult": 0,
-    "controlDataVarience": 0,
-    "controlDpsResult": 0,
-    "testDpsData": [{}],
-    "controlDpsData": [{}]
-  }]
+    {
+      "testDataVarience": 0,
+      "controlDpsData": [{}],
+      "damagesDelt": [],
+      "testDpsData": [{}],
+      "playerName": "Richleth",
+      "weaponAffixes": [{
+        "affix2": "",
+        "affix1": ""
+      }],
+      "frameDamageDelt": [],
+      "tilesets": {
+        "head": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ],
+        "weapon": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ],
+        "chest": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ],
+        "gloves": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ],
+        "body": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ]
+      },
+      "testDpsResult": 0,
+      "controlDataVarience": 0,
+      "controlDpsResult": 0
+    }
+  ],
+  "Brettman": [
+    {
+      "testDataVarience": 0,
+      "controlDpsData": [{}],
+      "damagesDelt": [],
+      "testDpsData": [{}],
+      "playerName": "Richleth",
+      "weaponAffixes": [{
+        "affix2": "",
+        "affix1": ""
+      }],
+      "frameDamageDelt": [],
+      "tilesets": {
+        "head": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ],
+        "weapon": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ],
+        "chest": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ],
+        "gloves": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ],
+        "body": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ]
+      },
+      "testDpsResult": 0,
+      "controlDataVarience": 0,
+      "controlDpsResult": 0
+    },
+    {
+      "testDataVarience": 0,
+      "controlDpsData": [{}],
+      "damagesDelt": [],
+      "testDpsData": [{}],
+      "playerName": "Richleth",
+      "weaponAffixes": [{
+        "affix2": "",
+        "affix1": ""
+      }],
+      "frameDamageDelt": [],
+      "tilesets": {
+        "head": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ],
+        "weapon": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ],
+        "chest": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ],
+        "gloves": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ],
+        "body": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ]
+      },
+      "testDpsResult": 0,
+      "controlDataVarience": 0,
+      "controlDpsResult": 0
+    }
+  ]
 }

@@ -8,37 +8,35 @@ void InitLayout() {
   textboxes.add(receiver);
 }
 void drawDropdownMenu() {
-  if (nameDropdownMenuOpen) {
-    try {
-      if (readyToParse == false) {
-        println("---Not Ready To Parse---");
-      }
-      line = reader.readLine();
-    } 
-    catch (IOException e) {
-      e.printStackTrace();
-      line = null;
-      println("CATCH IO");
+  try {
+    if (readyToParse == false) {
+      println("---Not Ready To Parse---");
     }
-    if (line == null) {
-      if (readyToParse == false) {
-        frameRate(360);
-        println("---Ready To Parse---");
-        readyToParse = true;
-      }
-    } else {
-      //Below code allows for dynamic adding of names to a list
-      sameName = false;
-      String[] pieces = split(line, " "); 
-      if (pieces.length >= 7) {
-        println("Length Check Success");
-        if (pieces[pieces.length-1].equals("(Critical)")) {
-          println("length - 1 check");
-          addNames(pieces, 2);
-        } else if (pieces[1].equals("[Combat]") && ((pieces[pieces.length-2].equals("from") && pieces[pieces.length-3].equals("damage")) || pieces[pieces.length-2].equals("damage"))) {
-          //println("fallback");
-          addNames(pieces, 1);
-        }
+    line = reader.readLine();
+  } 
+  catch (IOException e) {
+    e.printStackTrace();
+    line = null;
+    println("CATCH IO");
+  }
+  if (line == null) {
+    if (readyToParse == false) {
+      frameRate(360);
+      println("---Ready To Parse---");
+      readyToParse = true;
+    }
+  } else {
+    //Below code allows for dynamic adding of names to a list
+    sameName = false;
+    String[] pieces = split(line, " "); 
+    if (pieces.length >= 7) {
+      println("Length Check Success");
+      if (pieces[pieces.length-1].equals("(Critical)")) {
+        println("length - 1 check");
+        addNames(pieces, 2);
+      } else if (pieces[1].equals("[Combat]") && ((pieces[pieces.length-2].equals("from") && pieces[pieces.length-3].equals("damage")) || pieces[pieces.length-2].equals("damage"))) {
+        //println("fallback");
+        addNames(pieces, 1);
       }
     }
   }
@@ -58,8 +56,8 @@ void addNames(String[] pieces, int arrayIndex) {
       println("Success 3a");
       try {
         names.add(subPieces[0]);
-        playerDropdown.get(ScrollableList.class, "dropdown").clear();
-        playerDropdown.get(ScrollableList.class, "dropdown").addItems(names);
+        playerDropdown.get(ScrollableList.class, "Player_Chosen").clear();
+        playerDropdown.get(ScrollableList.class, "Player_Chosen").addItems(names);
       } 
       catch (UnsupportedOperationException e) {
         e.printStackTrace();
@@ -249,8 +247,9 @@ JSONObject newData() {
   println();
   println("control "+controlVarience);
   println("test "+testVarience);
-  
-  
+
+
   controlData.setJSONObject("tilesets", new JSONObject()); //TO BE IMPLEMENTED LATER
+  println(controlData);
   return controlData;
 }
