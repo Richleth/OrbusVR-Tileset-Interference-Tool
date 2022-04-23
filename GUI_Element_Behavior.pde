@@ -207,10 +207,15 @@ class GuiElementTextChangeBehavior implements GuiElementDisplayBehavior {
       float tTs = (float)playerData.getDouble("testDataVarience");
       float Cs = sqrt(tCs);
       float Ts = sqrt(tTs);
-
-      double deviationMaximum = (T+Ts)-(C-Cs); 
-      double deviationMinimum = (T-Ts)-(C+Cs);
-      textToReturn = "The Range of Deviation is between "+ deviationMinimum +" and "+deviationMaximum;
+      float cPD = (Cs/C)*100;
+      float tPD = (Ts/T)*100;
+      controlPercentDeviation = cPD;
+      testPercentDeviation = tPD;
+      float avgDeviation = (Cs+Ts)/2;
+      float avgDeviationPercent = (((Cs+Ts)/2)/C)*100;
+      //double deviationMaximum = (T+Ts)-(C-Cs); //Potentially change this to AVG the two deviations instead
+      //double deviationMinimum = (T-Ts)-(C+Cs);
+      textToReturn = "The Average Deviation is +- "+ avgDeviation+" or +- "+avgDeviationPercent+"%";
     }
   }
   private void deviationCheckerFunctionPercent() {
@@ -235,9 +240,15 @@ class GuiElementTextChangeBehavior implements GuiElementDisplayBehavior {
       float tTs = (float)playerData.getDouble("testDataVarience");
       float Cs = sqrt(tCs);
       float Ts = sqrt(tTs);
-      double deviationMaximum = (((T+Ts)-(C-Cs))/(C-Cs))*100; 
-      double deviationMinimum = (((T-Ts)-(C+Cs))/(C+Cs))*100;
-      textToReturn = "The Range of Deviation is between "+ deviationMinimum +"% and "+deviationMaximum+"%";
+      float cPD = (Cs/C)*100;
+      float tPD = (Ts/T)*100;
+      controlPercentDeviation = cPD;
+      testPercentDeviation = tPD;
+      float avgDeviation = (Cs+Ts)/2;
+      float avgDeviationPercent = (((Cs+Ts)/2)/C)*100;
+      //double deviationMaximum = (((T+Ts)-(C-Cs))/(C-Cs))*100; //Potentially change this to AVG the two deviations instead
+      //double deviationMinimum = (((T-Ts)-(C+Cs))/(C+Cs))*100;
+      textToReturn = "The Average Deviation is +- "+ avgDeviation+" or +- "+avgDeviationPercent+"%";
     }
   }
   String textToReturn = null;
@@ -253,10 +264,10 @@ class GuiElementTextChangeBehavior implements GuiElementDisplayBehavior {
       textToReturn = avgPercentDamageIncrease+" % Damage Increase"; //NEEDS TO ACTUALLY DISPLAY DIFFERENCE BETWEEN CONTROL AND TEST
       break;
     case 3:
-      textToReturn = "Control Standard Deviation: +- "+cStandardDeviation;
+      textToReturn = "Control Standard Deviation: +- "+cStandardDeviation+" or +- "+controlPercentDeviation+"%";
       break;
     case 4:
-      textToReturn = "Test Standard Deviation: +- "+tStandardDeviation;
+      textToReturn = "Test Standard Deviation: +- "+tStandardDeviation+" or +- "+testPercentDeviation+"%";
       break;
     case 5:
       deviationCheckerFunctionDps();

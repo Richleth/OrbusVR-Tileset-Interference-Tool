@@ -39,12 +39,14 @@ float critDamagePlus = 1.53;
 float avgDps = 0;
 float avgDpsDifference = 0;
 float avgPercentDamageIncrease = 0;
-final float timerConstant = 120;
+final float timerConstant = 150;
 float timer = 1;
 float cStandardDeviation = 0;
 float tStandardDeviation = 0;
 float cSD = 0;
 float tSD = 0;
+float controlPercentDeviation = 0;
+float testPercentDeviation = 0;
 //BOOLEANS\\
 boolean changedChosenName = false;
 boolean parsing = false;
