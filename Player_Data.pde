@@ -40,14 +40,18 @@ class PlayerDataMain { //<>// //<>// //<>// //<>//
     for (int i = 0; i < playerDataElementKeys.size(); i++) {
       nameValues.setString(i, playerDataElementKeys.get(i));
       JSONObject playerDataObject = playerDataElements.get(playerDataElementKeys.get(i)).returnAllObjectData(); //SOMETHING WRONG HERE
+      println(playerDataObject);
       playerDataValues.setJSONObject(i, playerDataObject);
+
       // NEED TO MAKE SURE THE DATA IS UP TO DATE IN OBJECT
     }
     writePlayerData.setJSONArray("names", nameValues);
     for (int i = 0; i < playerDataElementKeys.size(); i++) {
-      writePlayerData.setJSONArray(playerDataElementKeys.get(i), playerDataValues);
+      JSONArray tempValues = new JSONArray();
+      JSONObject playerDataObject = playerDataValues.getJSONObject(i);
+      tempValues.setJSONObject(0,playerDataObject);
+      writePlayerData.setJSONArray(playerDataElementKeys.get(i), tempValues);
     }
-
     println(writePlayerData);
     // Changed from testing file to real file read at startup
     saveJSONObject(writePlayerData, "data/playerDataElements.json");
@@ -126,10 +130,6 @@ class PlayerDataElement {
     println(data, tData);
   }
   void updateData(String[] keysToUpdate, JSONObject data) {
-    
-    
-    avgDpsDifference = testDpsResult - controlDpsResult;
-    avgPercentDamageIncrease = (avgDpsDifference/controlDpsResult)*100;
     for (int i = 0; i < keysToUpdate.length; i++) {
       switch (keysToUpdate[i]) {
       case "controlDpsResult":
@@ -147,10 +147,12 @@ class PlayerDataElement {
       case "controlDataVarience":
         controlDataVarience = data.getDouble("controlDataVarience");
         cStandardDeviation = sqrt((float)controlDataVarience); // Sets cStandardDeviation when this field is updated
+        cSD = cStandardDeviation;
         break;
       case "testDataVarience":
         testDataVarience = data.getDouble("testDataVarience");
         tStandardDeviation = sqrt((float)tStandardDeviation); // Sets tStandardDeviation when this field is updated
+        tSD = tStandardDeviation;
         break;
       case "damagesDelt":
         damagesDelt = data.getJSONArray("damagesDelt");
@@ -166,6 +168,8 @@ class PlayerDataElement {
         break;
       }
     }
+    avgDpsDifference = testDpsResult - controlDpsResult;
+    avgPercentDamageIncrease = (avgDpsDifference/controlDpsResult)*100;
   }
   JSONObject returnAllObjectData() {
     JSONObject playerDataObject = new JSONObject();    

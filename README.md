@@ -3,7 +3,7 @@ A tool to analyze how well tilesets perform in OrbusVR
 
 This program attempts to analyse the real damage boost your tiles give on average in an isolated test with the testing dummies.
 
-To do this the progam analyses DPS for 1 Minute without tilesets and then compares against the DPS with tilesets to attempt to determine the % boost the equiped tilesets have.
+To do this the progam analyses DPS for 2 Minutes 30 seconds without tilesets and then compares against the DPS with tilesets to attempt to determine the % boost the equiped tilesets have.
 
 Tilesets that last longer but have worse interference CAN give higher an overall damage boost due to the extra length that the set is active.
  

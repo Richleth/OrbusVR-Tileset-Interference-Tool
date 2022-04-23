@@ -123,6 +123,12 @@ void draw() {
       changedChosenName = false;
     }
   }
+  if (cSD != 0) {
+    cStandardDeviation = cSD;
+  }
+  if (cSD != 0) {
+    tStandardDeviation = tSD;
+  }
   background(backgroundColor);
   //println(frameRate, frameCount);
   //println(mouseX,mouseY);
@@ -145,24 +151,23 @@ void draw() {
             parseCombatLog(); // Need to log frame hit data and the damage delt
             timer++;
             //println(timer);
-          } else
-            if (timer > timerConstant*frameRate) { // POTENTIALLY NEEDS BOOLEAN TO MAKE SURE THIS CODE ONLY RUNS ONCE
-              //Log player dps avg pair
-              try {
-                playerController.updatePlayerDataElement(newData(), nameChosen, new String[] {"controlDpsResult", "controlDataVarience", "damagesDelt", "frameDamageDelt", "controlDpsData"});
-              } 
-              catch (NullPointerException e) {
-                playerController.createPlayerDataElement(newData(), nameChosen, "NEW");
-              }
-              combatStarted = false;
-              parsing = false;
-              controlParse = false;
-              endParseSfx.play();
+          } else if (timer > timerConstant*frameRate) { // POTENTIALLY NEEDS BOOLEAN TO MAKE SURE THIS CODE ONLY RUNS ONCE
+            //Log player dps avg pair
+            try {
+              playerController.updatePlayerDataElement(newData(), nameChosen, new String[] {"controlDpsResult", "controlDataVarience", "damagesDelt", "frameDamageDelt", "controlDpsData"});
+            } 
+            catch (NullPointerException e) {
+              playerController.createPlayerDataElement(newData(), nameChosen, "NEW");
             }
+            combatStarted = false;
+            parsing = false;
+            controlParse = false;
+            endParseSfx.play();
+          }
         } else {
           parseCombatLogInit();
         }
-      } else if (testParse && playerController.playerDataElementMatchesSelectName(nameChosen)) {
+      } else if (testParse) {
         if (combatStarted) {
           if (timer <= timerConstant*frameRate) {
             parseCombatLog();
