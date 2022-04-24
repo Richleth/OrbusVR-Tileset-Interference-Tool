@@ -21,7 +21,7 @@ void drawDropdownMenu() {
   }
   if (line == null) {
     if (readyToParse == false) {
-      frameRate(360);
+      frameRate(100);
       println("---Ready To Parse---");
       readyToParse = true;
     }
@@ -83,7 +83,7 @@ void parseCombatLog() {
   }
   if (line == null) {
     if (readyToParse == false) {
-      frameRate(360);
+      frameRate(100);
       println("---Ready To Parse---");
       readyToParse = true;
     }
@@ -120,7 +120,7 @@ void parseCombatLogInit() {
   }
   if (line == null) {
     if (readyToParse == false) {
-      frameRate(360);
+      frameRate(100);
       println("---Ready To Parse---");
       readyToParse = true;
     }
