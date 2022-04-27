@@ -134,44 +134,7 @@ void draw() {
       float controlDpsResult = dataElement.returnAllObjectData().getFloat("controlDpsResult");
       float testDataVarience = dataElement.returnAllObjectData().getFloat("testDataVarience");
       float controlDataVarience = dataElement.returnAllObjectData().getFloat("controlDataVarience");
-      float graphXAxisIncrement1a = timerConstant/dataElement.returnAllObjectData().getJSONArray("controlDpsData").size();
-      float graphXAxisIncrement1b = timerConstant/dataElement.returnAllObjectData().getJSONArray("testDpsData").size(); //Deviding the timer by the num of elements gives the avg elements per second
-      GPointsArray tempPoints1a = new GPointsArray();
-      GPointsArray tempPoints1b = new GPointsArray();
-      GPointsArray tempPoints2a = new GPointsArray();
-
-      float[] controlDpsNumbers = new float[dataElement.returnAllObjectData().getJSONArray("controlDpsData").size()];
-      float[] testDpsNumbers = new float[dataElement.returnAllObjectData().getJSONArray("testDpsData").size()];
-
-      for (int i = 0; i < dataElement.returnAllObjectData().getJSONArray("controlDpsData").size(); i++) {
-        controlDpsNumbers[i] = dataElement.returnAllObjectData().getJSONArray("controlDpsData").getFloat(i);
-        tempPoints1a.add(new GPoint(i*graphXAxisIncrement1a, dataElement.returnAllObjectData().getJSONArray("controlDpsData").getFloat(i))); //Control Whole DPS Graph Point
-      }
-      for (int i = 0; i < dataElement.returnAllObjectData().getJSONArray("testDpsData").size(); i++) {
-        testDpsNumbers[i] = dataElement.returnAllObjectData().getJSONArray("testDpsData").getFloat(i);
-        tempPoints1b.add(new GPoint(i*graphXAxisIncrement1b, dataElement.returnAllObjectData().getJSONArray("testDpsData").getFloat(i))); //Test Whole DPS Graph Point
-      }
-      if (controlDpsNumbers.length < testDpsNumbers.length) {
-        for (int i = 0; i < dataElement.returnAllObjectData().getJSONArray("controlDpsData").size(); i++) {
-          float testDpsNumber = testDpsNumbers[i];
-          float controlDpsNumber = controlDpsNumbers[i];
-          float percentIncrease = ((testDpsNumber-controlDpsNumber)/abs(controlDpsNumber))*100;
-          tempPoints2a.add(new GPoint(i*graphXAxisIncrement1b, percentIncrease)); //Percent Increase Over Control Point
-        }
-      } else {
-        for (int i = 0; i < dataElement.returnAllObjectData().getJSONArray("testDpsData").size(); i++) {
-          float testDpsNumber = testDpsNumbers[i];
-          float controlDpsNumber = controlDpsNumbers[i];
-          float percentIncrease = ((testDpsNumber-controlDpsNumber)/abs(controlDpsNumber))*100;
-          tempPoints2a.add(new GPoint(i*graphXAxisIncrement1b, percentIncrease)); //Percent Increase Over Control Point
-        }
-      }
-      points1a.removeRange(0, points1a.getNPoints());
-      points1b.removeRange(0, points1b.getNPoints());
-      points2a.removeRange(0, points1a.getNPoints());
-      points1a = tempPoints1a;
-      points1b = tempPoints1b;
-      points2a = tempPoints2a;
+      calculateGraphPoints(dataElement);
       avgDpsDifference = testDpsResult - controlDpsResult;
       avgPercentDamageIncrease = (avgDpsDifference/controlDpsResult)*100;
       cStandardDeviation = sqrt(testDataVarience);
@@ -249,6 +212,8 @@ void draw() {
               parsing = false;
               testParse = false;
               endParseSfx.play();
+              PlayerDataElement dataElement = playerController.getPlayerDataElement(nameChosen);
+              calculateGraphPoints(dataElement);
             }
         } else {
           parseCombatLogInit();
