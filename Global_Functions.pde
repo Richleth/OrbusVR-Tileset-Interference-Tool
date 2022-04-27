@@ -254,11 +254,18 @@ JSONObject newData() {
   return controlData;
 }
 
-void graphMode() {
+void graphModeDps() {
   if (graphMode) {
     //graph.setDim(width-100, height/4);
     graph.setPoints(points1a);
     graph.getLayer("layer 1").setPoints(points1b);
+    float[] pointSizes1 = new float[points1a.getNPoints()];
+    float[] pointSizes2 = new float[points1b.getNPoints()];
+    //for (int i = 0; i < points1b.getNPoints()-10; i++) {
+    //  pointSizes2[i] = 0;
+    //}
+    graph.setPointSizes(pointSizes1);
+    graph.getLayer("layer 1").setPointSizes(pointSizes2);
     graph.beginDraw();
     graph.drawBox();
     graph.drawXAxis();
@@ -278,6 +285,33 @@ void graphMode() {
     //graph.drawPolygon(polygonPoints, p.color(255, 200));
     graph.drawLabels();
     graph.endDraw();
+  } else {
+  }
+}
+void graphModePercent() {
+  if (graphMode) {
+    //graph.setDim(width-100, height/4);
+    graph2.setPoints(points2a);
+    float[] pointSizes1 = new float[points2a.getNPoints()];
+    //for (int i = 0; i < points1b.getNPoints()-10; i++) {
+    //  pointSizes2[i] = 0;
+    //}
+    graph2.setPointSizes(pointSizes1);
+    graph2.beginDraw();
+    graph2.drawBox();
+    graph2.drawXAxis();
+    graph2.drawYAxis();
+    graph2.drawTopAxis();
+    graph2.drawRightAxis();
+    graph2.drawTitle();
+    graph2.drawGridLines(GPlot.BOTH);
+    //graph.drawFilledContours(GPlot.HORIZONTAL, 0.05);
+    graph2.drawPoints();
+    graph2.drawLines();
+    //graph.drawPoint(new GPoint(65, 1.5), mug);
+    //graph.drawPolygon(polygonPoints, p.color(255, 200));
+    graph2.drawLabels();
+    graph2.endDraw();
   } else {
   }
 }

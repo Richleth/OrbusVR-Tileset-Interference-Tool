@@ -1,4 +1,4 @@
-/** //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
+/** //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
  ----------IMPORTANT----------
  Users must use a non bleed weapon as bleed is inherintly luck based and will throw off results!
  Users must use a non lightning forged weapon as lightning forged is inherintly luck based and will throw off results!
@@ -35,8 +35,8 @@
 void setup() {
   graph = new GPlot(this);
   graph.setPos(0, 50);
-  graph.setDim(width-125, height-200);
-  graph.getTitle().setText("Tileset Interference");
+  graph.setDim(width-125, height/2-150);
+  graph.getTitle().setText("Tileset Interference DPS");
   graph.getXAxis().getAxisLabel().setText("Time");
   graph.getYAxis().getAxisLabel().setText("Damage Per Second");
   graph.activateZooming(1.1, CENTER, CENTER);
@@ -46,10 +46,18 @@ void setup() {
   graph.setLineColor(color(0, 0, 255));
   graph.addLayer("layer 1", points1b);
   graph.getLayer("layer 1").setLineColor(color(255, 0, 0));
-  for (int i = 0; i < 500; i++) {
-    //points1a.add(new GPoint(i, noise(500 + 0.1 * i) + 0.5, "point " + i));
-    //points1b.add(new GPoint(i, noise(1 + 0.1 * i) + 0.5, "point " + i));
-  }
+  graph2 = new GPlot(this);
+  graph2.setPos(0, height/2);
+  graph2.setDim(width-125, height/2-150);
+  graph2.getTitle().setText("Tileset Interference Percent");
+  graph2.getXAxis().getAxisLabel().setText("Time");
+  graph2.getYAxis().getAxisLabel().setText("Percent Damage Increase");
+  graph2.activateZooming(1.1, CENTER, CENTER);
+  graph2.activatePanning(LEFT);
+  graph2.activateReset(RIGHT);
+  graph2.setPoints(points2a);
+  graph2.setLineColor(color(255, 0, 0));
+
   surface.setIcon(loadImage("data/orbusvr_tileset_interference_tool_icon.png"));
   playerController.readPlayerDataElementsFromFile();
   startParseSfx = new SoundFile(this, "startEffect.mp3");
@@ -82,8 +90,7 @@ void setup() {
     .setItemHeight(40)
     .addItems(critDamagePlusGivenLabels)
     //.setType(ScrollableList.LIST) // currently supported DROPDOWN and LIST
-    .close()
-    ;
+    .close();
   critDamageDropdown.setFont(listFont, 14);
   //GUI\\
   //Get path to combat log\\
@@ -131,16 +138,40 @@ void draw() {
       float graphXAxisIncrement1b = timerConstant/dataElement.returnAllObjectData().getJSONArray("testDpsData").size(); //Deviding the timer by the num of elements gives the avg elements per second
       GPointsArray tempPoints1a = new GPointsArray();
       GPointsArray tempPoints1b = new GPointsArray();
+      GPointsArray tempPoints2a = new GPointsArray();
+
+      float[] controlDpsNumbers = new float[dataElement.returnAllObjectData().getJSONArray("controlDpsData").size()];
+      float[] testDpsNumbers = new float[dataElement.returnAllObjectData().getJSONArray("testDpsData").size()];
+
       for (int i = 0; i < dataElement.returnAllObjectData().getJSONArray("controlDpsData").size(); i++) {
-        tempPoints1a.add(new GPoint(i*graphXAxisIncrement1a, dataElement.returnAllObjectData().getJSONArray("controlDpsData").getFloat(i)));
+        controlDpsNumbers[i] = dataElement.returnAllObjectData().getJSONArray("controlDpsData").getFloat(i);
+        tempPoints1a.add(new GPoint(i*graphXAxisIncrement1a, dataElement.returnAllObjectData().getJSONArray("controlDpsData").getFloat(i))); //Control Whole DPS Graph Point
       }
       for (int i = 0; i < dataElement.returnAllObjectData().getJSONArray("testDpsData").size(); i++) {
-        tempPoints1b.add(new GPoint(i*graphXAxisIncrement1b, dataElement.returnAllObjectData().getJSONArray("testDpsData").getFloat(i)));
+        testDpsNumbers[i] = dataElement.returnAllObjectData().getJSONArray("testDpsData").getFloat(i);
+        tempPoints1b.add(new GPoint(i*graphXAxisIncrement1b, dataElement.returnAllObjectData().getJSONArray("testDpsData").getFloat(i))); //Test Whole DPS Graph Point
+      }
+      if (controlDpsNumbers.length < testDpsNumbers.length) {
+        for (int i = 0; i < dataElement.returnAllObjectData().getJSONArray("controlDpsData").size(); i++) {
+          float testDpsNumber = testDpsNumbers[i];
+          float controlDpsNumber = controlDpsNumbers[i];
+          float percentIncrease = ((testDpsNumber-controlDpsNumber)/abs(controlDpsNumber))*100;
+          tempPoints2a.add(new GPoint(i*graphXAxisIncrement1b, percentIncrease)); //Percent Increase Over Control Point
+        }
+      } else {
+        for (int i = 0; i < dataElement.returnAllObjectData().getJSONArray("testDpsData").size(); i++) {
+          float testDpsNumber = testDpsNumbers[i];
+          float controlDpsNumber = controlDpsNumbers[i];
+          float percentIncrease = ((testDpsNumber-controlDpsNumber)/abs(controlDpsNumber))*100;
+          tempPoints2a.add(new GPoint(i*graphXAxisIncrement1b, percentIncrease)); //Percent Increase Over Control Point
+        }
       }
       points1a.removeRange(0, points1a.getNPoints());
       points1b.removeRange(0, points1b.getNPoints());
+      points2a.removeRange(0, points1a.getNPoints());
       points1a = tempPoints1a;
       points1b = tempPoints1b;
+      points2a = tempPoints2a;
       avgDpsDifference = testDpsResult - controlDpsResult;
       avgPercentDamageIncrease = (avgDpsDifference/controlDpsResult)*100;
       cStandardDeviation = sqrt(testDataVarience);
@@ -161,7 +192,8 @@ void draw() {
     tStandardDeviation = tSD;
   }
   background(backgroundColor);
-  graphMode();
+  graphModeDps();
+  graphModePercent();
   //println(frameRate, frameCount);
   //println(mouseX,mouseY);
   if (playerDropdown.get(ScrollableList.class, "Player_Chosen").isOpen()) {
