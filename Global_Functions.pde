@@ -253,3 +253,31 @@ JSONObject newData() {
   println(controlData);
   return controlData;
 }
+
+void graphMode() {
+  if (graphMode) {
+    //graph.setDim(width-100, height/4);
+    graph.setPoints(points1a);
+    graph.getLayer("layer 1").setPoints(points1b);
+    graph.beginDraw();
+    graph.drawBox();
+    graph.drawXAxis();
+    graph.drawYAxis();
+    graph.drawTopAxis();
+    graph.drawRightAxis();
+    graph.drawTitle();
+    graph.drawGridLines(GPlot.BOTH);
+    String[] legendNames = {"Control Parse", "Test Parse"};
+    float[] pos1 = {0.07, 0.30};
+    float[] pos2 = {0.92, 0.92};
+    graph.drawLegend(legendNames, pos1, pos2);
+    //graph.drawFilledContours(GPlot.HORIZONTAL, 0.05);
+    graph.drawPoints();
+    graph.drawLines();
+    //graph.drawPoint(new GPoint(65, 1.5), mug);
+    //graph.drawPolygon(polygonPoints, p.color(255, 200));
+    graph.drawLabels();
+    graph.endDraw();
+  } else {
+  }
+}

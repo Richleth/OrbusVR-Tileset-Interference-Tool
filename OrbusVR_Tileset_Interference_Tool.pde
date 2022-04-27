@@ -33,6 +33,23 @@
  */
 
 void setup() {
+  graph = new GPlot(this);
+  graph.setPos(0, 50);
+  graph.setDim(width-125, height-200);
+  graph.getTitle().setText("Tileset Interference");
+  graph.getXAxis().getAxisLabel().setText("Time");
+  graph.getYAxis().getAxisLabel().setText("Damage Per Second");
+  graph.activateZooming(1.1, CENTER, CENTER);
+  graph.activatePanning(LEFT);
+  graph.activateReset(RIGHT);
+  graph.setPoints(points1a);
+  graph.setLineColor(color(0, 0, 255));
+  graph.addLayer("layer 1", points1b);
+  graph.getLayer("layer 1").setLineColor(color(255, 0, 0));
+  for (int i = 0; i < 500; i++) {
+    //points1a.add(new GPoint(i, noise(500 + 0.1 * i) + 0.5, "point " + i));
+    //points1b.add(new GPoint(i, noise(1 + 0.1 * i) + 0.5, "point " + i));
+  }
   surface.setIcon(loadImage("data/orbusvr_tileset_interference_tool_icon.png"));
   playerController.readPlayerDataElementsFromFile();
   startParseSfx = new SoundFile(this, "startEffect.mp3");
@@ -110,7 +127,18 @@ void draw() {
       float controlDpsResult = dataElement.returnAllObjectData().getFloat("controlDpsResult");
       float testDataVarience = dataElement.returnAllObjectData().getFloat("testDataVarience");
       float controlDataVarience = dataElement.returnAllObjectData().getFloat("controlDataVarience");
-
+      float graphXAxisIncrement1a = timerConstant/dataElement.returnAllObjectData().getJSONArray("controlDpsData").size();
+      float graphXAxisIncrement1b = timerConstant/dataElement.returnAllObjectData().getJSONArray("testDpsData").size(); //Deviding the timer by the num of elements gives the avg elements per second
+      GPointsArray tempPoints1a = new GPointsArray();
+      GPointsArray tempPoints1b = new GPointsArray();
+      for (int i = 0; i < dataElement.returnAllObjectData().getJSONArray("controlDpsData").size(); i++) {
+        tempPoints1a.add(new GPoint(i*graphXAxisIncrement1a, dataElement.returnAllObjectData().getJSONArray("controlDpsData").getFloat(i)));
+      }
+      for (int i = 0; i < dataElement.returnAllObjectData().getJSONArray("testDpsData").size(); i++) {
+        tempPoints1b.add(new GPoint(i*graphXAxisIncrement1b, dataElement.returnAllObjectData().getJSONArray("testDpsData").getFloat(i)));
+      }
+      points1a = tempPoints1a;
+      points1b = tempPoints1b;
       avgDpsDifference = testDpsResult - controlDpsResult;
       avgPercentDamageIncrease = (avgDpsDifference/controlDpsResult)*100;
       cStandardDeviation = sqrt(testDataVarience);
@@ -131,6 +159,7 @@ void draw() {
     tStandardDeviation = tSD;
   }
   background(backgroundColor);
+  graphMode();
   //println(frameRate, frameCount);
   //println(mouseX,mouseY);
   if (playerDropdown.get(ScrollableList.class, "Player_Chosen").isOpen()) {
@@ -212,10 +241,12 @@ void keyPressed() {
   } else if (key == 'g' || key == 'G') { //Graph Mode
     playerDropdown.hide();
     critDamageDropdown.hide();
+    graphMode = true;
     guiController.setHidden();
   } else if (key == 'm' || key == 'M') { //Main Mode
     playerDropdown.show();
     critDamageDropdown.show();
+    graphMode = false;
     guiController.setVisible();
   } else if (key == ']' || key == ']') { //Main Mode
     timer = 999999999;
