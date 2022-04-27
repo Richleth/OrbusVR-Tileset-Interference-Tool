@@ -137,6 +137,8 @@ void draw() {
       for (int i = 0; i < dataElement.returnAllObjectData().getJSONArray("testDpsData").size(); i++) {
         tempPoints1b.add(new GPoint(i*graphXAxisIncrement1b, dataElement.returnAllObjectData().getJSONArray("testDpsData").getFloat(i)));
       }
+      points1a.removeRange(0, points1a.getNPoints());
+      points1b.removeRange(0, points1b.getNPoints());
       points1a = tempPoints1a;
       points1b = tempPoints1b;
       avgDpsDifference = testDpsResult - controlDpsResult;
