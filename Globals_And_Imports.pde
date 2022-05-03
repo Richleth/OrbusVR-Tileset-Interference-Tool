@@ -6,12 +6,7 @@ import processing.awt.PSurfaceAWT.SmoothCanvas;
 import javax.swing.JFrame;
 import java.awt.Dimension;
 //CONTRIBUTED LIBRARY GLOBALS\\
-GPlot graph; // 150 sec x coord get the size of each array for dps data and devide by 150 to get the x increment
-GPlot graph2; // 150 sec x coord get the size of each array for dps data and devide by 150 to get the x increment
-GPointsArray points1a = new GPointsArray();
-GPointsArray points1b = new GPointsArray();
-GPointsArray points2a = new GPointsArray();
-GPointsArray points2b = new GPointsArray();
+GPlot graph;
 ControlP5 playerDropdown;
 ControlP5 critDamageDropdown;
 //JSON ARRAYS\\
@@ -64,7 +59,6 @@ boolean nameDropdownMenuOpen = false;
 boolean sameName = false;
 boolean critDamagePlusGiven = false;
 boolean combatStarted = false;
-boolean graphMode = false;
 //GUI MAIN\\
 GuiMain guiController = new GuiMain();
 //PLAYER DATA MAIN\\
