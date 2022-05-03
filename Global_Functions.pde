@@ -212,6 +212,8 @@ JSONObject newData() {
    */
 
   //Need to calculate data varience here
+  controlData.setJSONArray("controlDpsSecondData", damageData.getJSONArray("controlDpsSecondData"));
+  controlData.setJSONArray("testDpsSecondData", damageData.getJSONArray("testDpsSecondData"));
   controlData.setJSONArray("damagesDelt", damageData.getJSONArray("damagesDelt"));
   //println(controlData.getJSONArray("damagesDelt"));
   controlData.setJSONArray("frameDamageDelt", damageData.getJSONArray("frameDamageDelt"));
@@ -252,4 +254,150 @@ JSONObject newData() {
   controlData.setJSONObject("tilesets", new JSONObject()); //TO BE IMPLEMENTED LATER
   println(controlData);
   return controlData;
+}
+
+void graphModeDps() {
+  if (graphMode) {
+    //graph.setDim(width-100, height/4);
+    graph.setPoints(points1a);
+    graph.getLayer("layer 1").setPoints(points1b);
+    float[] pointSizes1 = new float[points1a.getNPoints()];
+    float[] pointSizes2 = new float[points1b.getNPoints()];
+    //for (int i = 0; i < points1b.getNPoints()-10; i++) {
+    //  pointSizes2[i] = 0;
+    //}
+    graph.setPointSizes(pointSizes1);
+    graph.getLayer("layer 1").setPointSizes(pointSizes2);
+    graph.beginDraw();
+    graph.drawBox();
+    graph.drawXAxis();
+    graph.drawYAxis();
+    graph.drawTopAxis();
+    graph.drawRightAxis();
+    graph.drawTitle();
+    graph.drawGridLines(GPlot.BOTH);
+    String[] legendNames = {"Control Parse", "Test Parse"};
+    float[] pos1 = {0.07, 0.30};
+    float[] pos2 = {0.92, 0.92};
+    graph.drawLegend(legendNames, pos1, pos2);
+    //graph.drawFilledContours(GPlot.HORIZONTAL, 0.05);
+    graph.drawPoints();
+    graph.drawLines();
+    //graph.drawPoint(new GPoint(65, 1.5), mug);
+    //graph.drawPolygon(polygonPoints, p.color(255, 200));
+    graph.drawLabels();
+    graph.endDraw();
+  } else {
+  }
+}
+void graphModePercent() {
+  if (graphMode) {
+    //graph.setDim(width-100, height/4);
+    graph2.setPoints(points2a);
+    float[] pointSizes1 = new float[points2a.getNPoints()];
+    //for (int i = 0; i < points1b.getNPoints()-10; i++) {
+    //  pointSizes2[i] = 0;
+    //}
+    graph2.setPointSizes(pointSizes1);
+    graph2.beginDraw();
+    graph2.drawBox();
+    graph2.drawXAxis();
+    graph2.drawYAxis();
+    graph2.drawTopAxis();
+    graph2.drawRightAxis();
+    graph2.drawTitle();
+    graph2.drawGridLines(GPlot.BOTH);
+    //graph.drawFilledContours(GPlot.HORIZONTAL, 0.05);
+    graph2.drawPoints();
+    graph2.drawLines();
+    //graph.drawPoint(new GPoint(65, 1.5), mug);
+    //graph.drawPolygon(polygonPoints, p.color(255, 200));
+    graph2.drawLabels();
+    graph2.endDraw();
+  } else {
+  }
+}
+void calculateGraphPoints(PlayerDataElement dataElement) {
+  try { // METHOD NEEDS FURTHER TESTING
+    if (dataElement.returnAllObjectData().getJSONArray("controlDpsSecondData").size() < 1 || dataElement.returnAllObjectData().getJSONArray("testDpsSecondData").size() < 1) {
+      //Method uses exact numbers saved when determining avg dps values
+      GPointsArray tempPoints1a = new GPointsArray();
+      GPointsArray tempPoints1b = new GPointsArray();
+      GPointsArray tempPoints2a = new GPointsArray();
+      float[] controlDpsNumbers = new float[dataElement.returnAllObjectData().getJSONArray("controlDpsData").size()];
+      float[] testDpsNumbers = new float[dataElement.returnAllObjectData().getJSONArray("testDpsData").size()];
+      for (int i = 0; i < dataElement.returnAllObjectData().getJSONArray("controlDpsData").size(); i++) {
+        float xPosValue = dataElement.returnAllObjectData().getJSONArray("controlDpsSecondData").getFloat(i)/timerConstant;
+        controlDpsNumbers[i] = dataElement.returnAllObjectData().getJSONArray("controlDpsData").getFloat(i);
+        tempPoints1a.add(new GPoint(xPosValue, dataElement.returnAllObjectData().getJSONArray("controlDpsData").getFloat(i))); //Control Whole DPS Graph Point
+      }
+      for (int i = 0; i < dataElement.returnAllObjectData().getJSONArray("testDpsData").size(); i++) {
+        float xPosValue = dataElement.returnAllObjectData().getJSONArray("testDpsSecondData").getFloat(i)/timerConstant;
+        testDpsNumbers[i] = dataElement.returnAllObjectData().getJSONArray("testDpsData").getFloat(i);
+        tempPoints1b.add(new GPoint(xPosValue, dataElement.returnAllObjectData().getJSONArray("testDpsData").getFloat(i))); //Test Whole DPS Graph Point
+      }
+      if (controlDpsNumbers.length < testDpsNumbers.length) {
+        for (int i = 0; i < dataElement.returnAllObjectData().getJSONArray("controlDpsData").size(); i++) {
+          float xPosValue = dataElement.returnAllObjectData().getJSONArray("testDpsSecondData").getFloat(i)/timerConstant;
+          float testDpsNumber = testDpsNumbers[i];
+          float controlDpsNumber = controlDpsNumbers[i];
+          float percentIncrease = ((testDpsNumber-controlDpsNumber)/abs(controlDpsNumber))*100;
+          tempPoints2a.add(new GPoint(xPosValue, percentIncrease)); //Percent Increase Over Control Point
+        }
+      } else {
+        for (int i = 0; i < dataElement.returnAllObjectData().getJSONArray("testDpsData").size(); i++) {
+          float xPosValue = dataElement.returnAllObjectData().getJSONArray("testDpsSecondData").getFloat(i)/timerConstant;
+          float testDpsNumber = testDpsNumbers[i];
+          float controlDpsNumber = controlDpsNumbers[i];
+          float percentIncrease = ((testDpsNumber-controlDpsNumber)/abs(controlDpsNumber))*100;
+          tempPoints2a.add(new GPoint(xPosValue, percentIncrease)); //Percent Increase Over Control Point
+        }
+      }
+      points1a.removeRange(0, points1a.getNPoints());
+      points1b.removeRange(0, points1b.getNPoints());
+      points2a.removeRange(0, points1a.getNPoints());
+      points1a = tempPoints1a;
+      points1b = tempPoints1b;
+      points2a = tempPoints2a;
+    }
+  } 
+  catch(NullPointerException e) {
+    // Old aprox method that avgs each point's x value based of # of points devided by timerConstant
+    float graphXAxisIncrement1a = timerConstant/dataElement.returnAllObjectData().getJSONArray("controlDpsData").size();
+    float graphXAxisIncrement1b = timerConstant/dataElement.returnAllObjectData().getJSONArray("testDpsData").size(); //Deviding the timer by the num of elements gives the avg elements per second
+    GPointsArray tempPoints1a = new GPointsArray();
+    GPointsArray tempPoints1b = new GPointsArray();
+    GPointsArray tempPoints2a = new GPointsArray();
+    float[] controlDpsNumbers = new float[dataElement.returnAllObjectData().getJSONArray("controlDpsData").size()];
+    float[] testDpsNumbers = new float[dataElement.returnAllObjectData().getJSONArray("testDpsData").size()];
+    for (int i = 0; i < dataElement.returnAllObjectData().getJSONArray("controlDpsData").size(); i++) {
+      controlDpsNumbers[i] = dataElement.returnAllObjectData().getJSONArray("controlDpsData").getFloat(i);
+      tempPoints1a.add(new GPoint(i*graphXAxisIncrement1a, dataElement.returnAllObjectData().getJSONArray("controlDpsData").getFloat(i))); //Control Whole DPS Graph Point
+    }
+    for (int i = 0; i < dataElement.returnAllObjectData().getJSONArray("testDpsData").size(); i++) {
+      testDpsNumbers[i] = dataElement.returnAllObjectData().getJSONArray("testDpsData").getFloat(i);
+      tempPoints1b.add(new GPoint(i*graphXAxisIncrement1b, dataElement.returnAllObjectData().getJSONArray("testDpsData").getFloat(i))); //Test Whole DPS Graph Point
+    }
+    if (controlDpsNumbers.length < testDpsNumbers.length) {
+      for (int i = 0; i < dataElement.returnAllObjectData().getJSONArray("controlDpsData").size(); i++) {
+        float testDpsNumber = testDpsNumbers[i];
+        float controlDpsNumber = controlDpsNumbers[i];
+        float percentIncrease = ((testDpsNumber-controlDpsNumber)/abs(controlDpsNumber))*100;
+        tempPoints2a.add(new GPoint(i*graphXAxisIncrement1b, percentIncrease)); //Percent Increase Over Control Point
+      }
+    } else {
+      for (int i = 0; i < dataElement.returnAllObjectData().getJSONArray("testDpsData").size(); i++) {
+        float testDpsNumber = testDpsNumbers[i];
+        float controlDpsNumber = controlDpsNumbers[i];
+        float percentIncrease = ((testDpsNumber-controlDpsNumber)/abs(controlDpsNumber))*100;
+        tempPoints2a.add(new GPoint(i*graphXAxisIncrement1b, percentIncrease)); //Percent Increase Over Control Point
+      }
+    }
+    points1a.removeRange(0, points1a.getNPoints());
+    points1b.removeRange(0, points1b.getNPoints());
+    points2a.removeRange(0, points1a.getNPoints());
+    points1a = tempPoints1a;
+    points1b = tempPoints1b;
+    points2a = tempPoints2a;
+  }
 }
