@@ -33,7 +33,6 @@
  */
 
 void setup() {
-  surface.setIcon(loadImage("data/orbusvr_tileset_interference_tool_icon.png"));
   playerController.readPlayerDataElementsFromFile();
   startParseSfx = new SoundFile(this, "startEffect.mp3");
   endParseSfx = new SoundFile(this, "endingEffect.mp3");
@@ -82,7 +81,7 @@ void setup() {
   reader2 = createReader("guiElements.txt");
   //Basic Setup\\
   size(860, 750);
-  frameRate(100);
+  frameRate(360);
   InitLayout();
   strokeWeight(2);
   stroke(0, 0, 0);
