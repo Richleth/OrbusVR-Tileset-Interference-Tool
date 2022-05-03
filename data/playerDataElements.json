@@ -6,6 +6,12 @@
   ],
   "Richleth": [{
     "testDataVarience": 4.826175980333733E7,
+    "testDpsSecondData": [
+
+    ],
+    "controlDpsSecondData": [
+
+    ],
     "controlDpsData": [
       5188,
       60304.19921875,
@@ -1120,6 +1126,12 @@
   }],
   "Brettman": [{
     "testDataVarience": 4364209.8605781635,
+    "testDpsSecondData": [
+
+    ],
+    "controlDpsSecondData": [
+
+    ],
     "controlDpsData": [
       989,
       7353.025390625,
@@ -1278,6 +1290,12 @@
   }],
   "OsciPlaski": [{
     "testDataVarience": 4.471050226418578E7,
+    "testDpsSecondData": [
+
+    ],
+    "controlDpsSecondData": [
+
+    ],
     "controlDpsData": [],
     "damagesDelt": [
       22357.9609375,

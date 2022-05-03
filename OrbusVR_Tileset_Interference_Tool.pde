@@ -181,7 +181,7 @@ void draw() {
           } else if (timer > timerConstant*frameRate) { // POTENTIALLY NEEDS BOOLEAN TO MAKE SURE THIS CODE ONLY RUNS ONCE
             //Log player dps avg pair
             try {
-              playerController.updatePlayerDataElement(newData(), nameChosen, new String[] {"controlDpsResult", "controlDataVarience", "damagesDelt", "frameDamageDelt", "controlDpsData"});
+              playerController.updatePlayerDataElement(newData(), nameChosen, new String[] {"controlDpsSecondData","controlDpsResult", "controlDataVarience", "damagesDelt", "frameDamageDelt", "controlDpsData"});
             } 
             catch (NullPointerException e) {
               playerController.createPlayerDataElement(newData(), nameChosen, "NEW");
@@ -203,7 +203,7 @@ void draw() {
             if (timer > timerConstant*frameRate) {
               //Log player dps avg pair
               try {
-                playerController.updatePlayerDataElement(newData(), nameChosen, new String[] {"testDpsResult", "testDataVarience", "damagesDelt", "frameDamageDelt", "testDpsData"});
+                playerController.updatePlayerDataElement(newData(), nameChosen, new String[] {"testDpsSecondData","testDpsResult", "testDataVarience", "damagesDelt", "frameDamageDelt", "testDpsData"});
               } 
               catch (NullPointerException e) {
                 playerController.createPlayerDataElement(newData(), nameChosen, "NEW");
