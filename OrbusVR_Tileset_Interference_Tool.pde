@@ -1,4 +1,4 @@
-/** //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
+/** //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
  ----------IMPORTANT----------
  Users must use a non bleed weapon as bleed is inherintly luck based and will throw off results!
  Users must use a non lightning forged weapon as lightning forged is inherintly luck based and will throw off results!
@@ -33,6 +33,31 @@
  */
 
 void setup() {
+  graph = new GPlot(this);
+  graph.setPos(0, 50);
+  graph.setDim(width-125, height/2-150);
+  graph.getTitle().setText("Tileset Interference DPS");
+  graph.getXAxis().getAxisLabel().setText("Time");
+  graph.getYAxis().getAxisLabel().setText("Damage Per Second");
+  graph.activateZooming(1.1, CENTER, CENTER);
+  graph.activatePanning(LEFT);
+  graph.activateReset(RIGHT);
+  graph.setPoints(points1a);
+  graph.setLineColor(color(0, 0, 255));
+  graph.addLayer("layer 1", points1b);
+  graph.getLayer("layer 1").setLineColor(color(255, 0, 0));
+  graph2 = new GPlot(this);
+  graph2.setPos(0, height/2);
+  graph2.setDim(width-125, height/2-150);
+  graph2.getTitle().setText("Tileset Interference Percent");
+  graph2.getXAxis().getAxisLabel().setText("Time");
+  graph2.getYAxis().getAxisLabel().setText("Percent Damage Increase");
+  graph2.activateZooming(1.1, CENTER, CENTER);
+  graph2.activatePanning(LEFT);
+  graph2.activateReset(RIGHT);
+  graph2.setPoints(points2a);
+  graph2.setLineColor(color(255, 0, 0));
+
   surface.setIcon(loadImage("data/orbusvr_tileset_interference_tool_icon.png"));
   playerController.readPlayerDataElementsFromFile();
   startParseSfx = new SoundFile(this, "startEffect.mp3");
@@ -65,8 +90,7 @@ void setup() {
     .setItemHeight(40)
     .addItems(critDamagePlusGivenLabels)
     //.setType(ScrollableList.LIST) // currently supported DROPDOWN and LIST
-    .close()
-    ;
+    .close();
   critDamageDropdown.setFont(listFont, 14);
   //GUI\\
   //Get path to combat log\\
@@ -110,7 +134,7 @@ void draw() {
       float controlDpsResult = dataElement.returnAllObjectData().getFloat("controlDpsResult");
       float testDataVarience = dataElement.returnAllObjectData().getFloat("testDataVarience");
       float controlDataVarience = dataElement.returnAllObjectData().getFloat("controlDataVarience");
-
+      calculateGraphPoints(dataElement);
       avgDpsDifference = testDpsResult - controlDpsResult;
       avgPercentDamageIncrease = (avgDpsDifference/controlDpsResult)*100;
       cStandardDeviation = sqrt(testDataVarience);
@@ -131,6 +155,8 @@ void draw() {
     tStandardDeviation = tSD;
   }
   background(backgroundColor);
+  graphModeDps();
+  graphModePercent();
   //println(frameRate, frameCount);
   //println(mouseX,mouseY);
   if (playerDropdown.get(ScrollableList.class, "Player_Chosen").isOpen()) {
@@ -155,7 +181,7 @@ void draw() {
           } else if (timer > timerConstant*frameRate) { // POTENTIALLY NEEDS BOOLEAN TO MAKE SURE THIS CODE ONLY RUNS ONCE
             //Log player dps avg pair
             try {
-              playerController.updatePlayerDataElement(newData(), nameChosen, new String[] {"controlDpsResult", "controlDataVarience", "damagesDelt", "frameDamageDelt", "controlDpsData"});
+              playerController.updatePlayerDataElement(newData(), nameChosen, new String[] {"controlDpsSecondData","controlDpsResult", "controlDataVarience", "damagesDelt", "frameDamageDelt", "controlDpsData"});
             } 
             catch (NullPointerException e) {
               playerController.createPlayerDataElement(newData(), nameChosen, "NEW");
@@ -177,7 +203,7 @@ void draw() {
             if (timer > timerConstant*frameRate) {
               //Log player dps avg pair
               try {
-                playerController.updatePlayerDataElement(newData(), nameChosen, new String[] {"testDpsResult", "testDataVarience", "damagesDelt", "frameDamageDelt", "testDpsData"});
+                playerController.updatePlayerDataElement(newData(), nameChosen, new String[] {"testDpsSecondData","testDpsResult", "testDataVarience", "damagesDelt", "frameDamageDelt", "testDpsData"});
               } 
               catch (NullPointerException e) {
                 playerController.createPlayerDataElement(newData(), nameChosen, "NEW");
@@ -186,6 +212,8 @@ void draw() {
               parsing = false;
               testParse = false;
               endParseSfx.play();
+              PlayerDataElement dataElement = playerController.getPlayerDataElement(nameChosen);
+              calculateGraphPoints(dataElement);
             }
         } else {
           parseCombatLogInit();
@@ -212,10 +240,12 @@ void keyPressed() {
   } else if (key == 'g' || key == 'G') { //Graph Mode
     playerDropdown.hide();
     critDamageDropdown.hide();
+    graphMode = true;
     guiController.setHidden();
   } else if (key == 'm' || key == 'M') { //Main Mode
     playerDropdown.show();
     critDamageDropdown.show();
+    graphMode = false;
     guiController.setVisible();
   } else if (key == ']' || key == ']') { //Main Mode
     timer = 999999999;
