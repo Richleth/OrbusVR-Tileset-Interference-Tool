@@ -22,7 +22,6 @@ BufferedReader reader;
 BufferedReader reader2;
 //ARRAYLIST\\
 ArrayList names = new ArrayList();
-ArrayList<TEXTBOX> textboxes = new ArrayList<TEXTBOX>();
 ArrayList<int[]> verts = new ArrayList<int[]>();
 //LONGS\\
 long charsToSkip = 0;

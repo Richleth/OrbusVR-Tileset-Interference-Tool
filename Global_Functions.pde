@@ -1,12 +1,3 @@
-void InitLayout() {
-  TEXTBOX receiver = new TEXTBOX();
-  receiver.W = 500;
-  receiver.H = 35;
-  receiver.X = 125;
-  receiver.trueX = 125;
-  receiver.Y = 50;
-  textboxes.add(receiver);
-}
 void drawDropdownMenu() {
   try {
     if (readyToParse == false) {

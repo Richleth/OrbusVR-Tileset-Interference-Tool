@@ -107,7 +107,6 @@ void setup() {
   //Basic Setup\\
   size(860, 750);
   frameRate(100);
-  InitLayout();
   strokeWeight(2);
   stroke(0, 0, 0);
   background(255);
