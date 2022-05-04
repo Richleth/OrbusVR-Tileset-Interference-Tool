@@ -1,4 +1,4 @@
-class PlayerDataMain { //<>// //<>// //<>// //<>// //<>//
+class PlayerDataMain { //<>// //<>// //<>// //<>// //<>// //<>//
   private HashMap<String, PlayerDataElement> playerDataElements = new HashMap<String, PlayerDataElement>();
   private ArrayList<String> playerDataElementKeys = new ArrayList<String>();
   private JSONObject mainData = new JSONObject();
@@ -192,6 +192,8 @@ class PlayerDataElement {
     playerDataObject.setDouble("testDataVarience", testDataVarience);    
     playerDataObject.setJSONArray("damagesDelt", damagesDelt);
     playerDataObject.setJSONArray("frameDamageDelt", frameDamageDelt);
+    playerDataObject.setJSONArray("controlDpsSecondData", controlDpsSecondData);
+    playerDataObject.setJSONArray("testDpsSecondData", testDpsSecondData);
     playerDataObject.setJSONObject("tilesets", tilesets);
     playerDataObject.setJSONArray("weaponAffixes", weaponAffixes);
     playerDataObject.setJSONArray("controlDpsData", controlDpsData);
